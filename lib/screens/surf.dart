@@ -10,15 +10,15 @@ import '../widgets/ui.dart';
 
 const _bodyPrompts = [
   'Wo im Körper spürst du es gerade am deutlichsten?',
-  'Ist es Druck, Zug, Kribbeln, Wärme oder Unruhe?',
+  'Ist es Druck, Ziehen, Kribbeln, Wärme oder Unruhe?',
   'Atme langsam in genau diese Stelle hinein.',
-  'Hände, Brust, Bauch, Kiefer: Wo ist Spannung?',
+  'Hände, Brust, Bauch, Kiefer: Wo spürst du Anspannung?',
   'Wird die Welle gerade höher oder flacher?',
-  'Du musst nichts tun. Nur beobachten.',
-  'Lass die Gedanken ziehen. Zurück zum Körper.',
-  'Wie fühlt es sich an der Kante der Empfindung an?',
-  'Merk dir: Du hältst das gerade aus.',
-  'Die Welle hat ihren Kamm. Danach kommt das Tal.',
+  'Du musst nichts tun, nur beobachten.',
+  'Lass die Gedanken vorbeiziehen. Zurück zum Körper.',
+  'Wo hört das Gefühl auf? Wie fühlt sich der Rand an?',
+  'Du hältst das gerade aus. Merk dir das.',
+  'Jede Welle erreicht einen Kamm. Danach flacht sie ab.',
 ];
 
 class SurfScreen extends StatefulWidget {
@@ -109,7 +109,7 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
       children: [
-        const PageHead(title: 'Surf die Welle.', motto: 'Nicht wegdrücken. Nicht nachgeben. Nur hinspüren.'),
+        const PageHead(title: 'Surf die Welle.', motto: 'Nicht wegdrücken, nicht nachgeben. Nur hinspüren.'),
         const SizedBox(height: 24),
         Text('Wie stark ist das Verlangen jetzt?', style: T.quote(p.fg, size: 18)),
         const SizedBox(height: 12),
@@ -122,7 +122,7 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Label('Heutige Welle'),
+                    Label('Dauer heute'),
                     const SizedBox(height: 8),
                     Text(fmtClock(_target), style: T.num(p.fg, size: 40)),
                   ],
@@ -142,11 +142,11 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
         ),
         const SizedBox(height: 12),
         Text(
-          'Danach darfst du tun, was du willst. Wenn du durchhältst, wird die nächste Welle eine Minute länger, bis 30 Minuten.',
+          'Danach darfst du tun, was du willst. Hältst du durch, verlängert sich der Timer beim nächsten Mal um eine Minute, bis höchstens 30 Minuten.',
           style: T.small(p.muted),
         ),
         const SizedBox(height: 28),
-        PrimaryButton('Los, ich surfe', icon: Icons.waves_rounded, onPressed: _start),
+        PrimaryButton('Los geht’s', icon: Icons.waves_rounded, onPressed: _start),
       ],
     );
   }
@@ -181,7 +181,7 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
-          child: GhostButton('Welle ist schon vorbei', onPressed: _stop),
+          child: GhostButton('Die Welle ist schon vorbei', onPressed: _stop),
         ),
       ],
     );
@@ -196,10 +196,10 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
       children: [
         PageHead(
           kicker: _completed ? 'Durchgehalten' : 'Abgebrochen nach ${fmtClock(_target - _left)}',
-          title: _completed ? 'Du bist die Welle geritten.' : 'Auch das zählt.',
+          title: _completed ? 'Du hast die Welle geritten.' : 'Auch das zählt.',
           motto: _completed
               ? 'Nächstes Mal: ${fmtClock(next)}. Jedes Mal ein Stück länger.'
-              : 'Jede Sekunde Hinspüren ist Training. Morgen wieder.',
+              : 'Jede Sekunde Hinspüren ist Training. Morgen geht es weiter.',
         ),
         const SizedBox(height: 28),
         Text('Wie stark ist das Verlangen jetzt?', style: T.quote(p.fg, size: 18)),
@@ -210,7 +210,7 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
           Text(
             _after! < _before!
                 ? 'Von $_before auf $_after. Genau so funktionieren Wellen.'
-                : 'Noch hoch. Mach direkt den Urge Sprint: bewegen, Kopf füllen.',
+                : 'Immer noch stark? Dann direkt in den Notfall-Sprint: bewegen, Kopf beschäftigen.',
             style: T.small(p.fg),
           ),
         ],

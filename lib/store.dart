@@ -48,7 +48,7 @@ class LogEntry {
   );
 }
 
-/// Cue-Audit (Technik 10).
+/// Auslöser-Check (Technik 10).
 class Audit {
   final DateTime at;
   final String craving;
@@ -137,7 +137,8 @@ class Store extends ChangeNotifier {
   List<Audit> audits = [];
   List<Decision> decisions = [];
 
-  String get displayName => name.trim().isEmpty ? 'Champion' : name.trim();
+  /// Beispielname, solange noch kein eigener Name eingetragen ist.
+  String get displayName => name.trim().isEmpty ? 'Alex' : name.trim();
 
   Future<void> load() async {
     _prefs = await SharedPreferences.getInstance();

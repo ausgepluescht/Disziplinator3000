@@ -236,7 +236,7 @@ class ScaleRow extends StatelessWidget {
           }),
         ),
         const SizedBox(height: 6),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Label('kaum'), Label('überwältigend')]),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Label('kaum'), Label('übermächtig')]),
       ],
     );
   }

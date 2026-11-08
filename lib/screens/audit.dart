@@ -17,10 +17,10 @@ const _questions = [
   _Q(
     'Verlangen',
     'Was willst du gerade wirklich? Nicht das Ding, sondern das Gefühl dahinter.',
-    'Instagram. Eigentlich: Reize und Flucht.',
+    'Instagram. Eigentlich: Ablenkung und Abschalten.',
   ),
   _Q('Gefühl', 'Was hast du direkt vor dem Verlangen gefühlt?', 'Müde, gelangweilt, geistig leer.'),
-  _Q('Gedanke', 'Welcher Gedanke kam unmittelbar davor?', '„Ich bin fertig mit Arbeit. Ich hab mir das verdient.“'),
+  _Q('Gedanke', 'Welcher Gedanke kam unmittelbar davor?', '„Feierabend. Das hab ich mir verdient.“'),
   _Q(
     'Situation',
     'Welche Situation hat diesen Gedanken ausgelöst?',
@@ -33,7 +33,7 @@ const _questions = [
   ),
 ];
 
-/// Technik 10: Cue-Audit. Vom Verlangen rückwärts zur Situation.
+/// Technik 10: Auslöser-Check. Vom Verlangen rückwärts zur Situation.
 class AuditScreen extends StatefulWidget {
   final String? craving;
   const AuditScreen({super.key, this.craving});
@@ -72,14 +72,14 @@ class _AuditScreenState extends State<AuditScreen> {
       c.clear();
     }
     setState(() => _step = -1);
-    toast(context, 'Umbau gespeichert. Jetzt umsetzen, heute noch.');
+    toast(context, 'Umbau gespeichert. Setz ihn noch heute um.');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_step < 0 ? '10 · CUE-AUDIT' : '10 · CUE-AUDIT · ${_step + 1}/${_questions.length}'),
+        title: Text(_step < 0 ? '10 · AUSLÖSER-CHECK' : '10 · AUSLÖSER-CHECK · ${_step + 1}/${_questions.length}'),
         leading: _step >= 0
             ? IconButton(icon: const Icon(Icons.close_rounded), onPressed: () => setState(() => _step = -1))
             : null,
@@ -96,12 +96,12 @@ class _AuditScreenState extends State<AuditScreen> {
       children: [
         const PageHead(
           title: 'Entfern das Schlachtfeld.',
-          motto: 'Situation, Gedanke, Gefühl, Handlung. Setz ganz vorne an.',
+          motto: 'Situation, Gedanke, Gefühl, Verlangen. Setz ganz vorne an.',
         ),
         const SizedBox(height: 18),
         const _Chain(),
         const SizedBox(height: 22),
-        Text('Wobei willst du ansetzen?', style: T.quote(p.fg, size: 18)),
+        Text('Um welches Verlangen geht es?', style: T.quote(p.fg, size: 18)),
         const SizedBox(height: 10),
         Wrap(
           spacing: 8,
@@ -112,10 +112,13 @@ class _AuditScreenState extends State<AuditScreen> {
           ],
         ),
         const SizedBox(height: 22),
-        PrimaryButton('Audit starten', icon: Icons.search_rounded, onPressed: () => setState(() => _step = 0)),
+        PrimaryButton('Check starten', icon: Icons.search_rounded, onPressed: () => setState(() => _step = 0)),
         SectionHeader('Deine Umbauten', trailing: Text('${s.audits.length}', style: T.num(p.muted, size: 12))),
         if (s.audits.isEmpty)
-          Text('Noch keine. Das Beispiel aus dem Video: jeden Abend um 22 Uhr Doomscrolling.', style: T.body(p.muted)),
+          Text(
+            'Noch keine. Hier das Beispiel aus dem Video: jeden Abend um 22 Uhr endloses Scrollen.',
+            style: T.body(p.muted),
+          ),
         if (s.audits.isEmpty) ...[
           const SizedBox(height: 12),
           _AuditCard(
@@ -304,7 +307,7 @@ class _AuditCard extends StatelessWidget {
           ),
           if (audit.fix.isNotEmpty) ...[const SizedBox(height: 12), Text(audit.fix, style: T.quote(p.fg, size: 18))],
           const SizedBox(height: 4),
-          row('Will', audit.want),
+          row('Wunsch', audit.want),
           row('Gefühl', audit.feeling),
           row('Gedanke', audit.thought),
           row('Situation', audit.situation),

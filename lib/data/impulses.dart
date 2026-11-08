@@ -24,6 +24,8 @@ List<Impulse> buildDeck(Store s, {String? craving, int? tech, Random? rnd}) {
   for (final t in techniques) {
     if (tech != null && t.nr != tech) continue;
     for (final p in t.prompts) {
+      // Ohne eingetragenen Namen keine Fragen in der dritten Person.
+      if (p.contains('{name}') && s.name.trim().isEmpty) continue;
       out.add(Impulse(s.fill(p), t.nr));
     }
   }

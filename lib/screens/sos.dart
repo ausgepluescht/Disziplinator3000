@@ -78,7 +78,7 @@ class _SosScreenState extends State<SosScreen> {
   @override
   Widget build(BuildContext context) {
     final p = context.c;
-    final titles = ['Was zieht?', 'Auslöser weg', 'Welle brechen', 'Ausgang'];
+    final titles = ['Benennen', 'Auslöser weg', 'Welle brechen', 'Bilanz'];
     return Scaffold(
       appBar: AppBar(
         title: Text('AKUT · ${_step + 1}/4 · ${titles[_step].toUpperCase()}'),
@@ -142,9 +142,9 @@ class _SosScreenState extends State<SosScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
       children: [
-        Text('Was zieht gerade an dir?', style: T.h1(p.fg)),
+        Text('Was lockt dich gerade?', style: T.h1(p.fg)),
         const SizedBox(height: 6),
-        Text('Benennen ist schon der erste Abstand.', style: T.quote(p.muted, size: 17)),
+        Text('Wer es benennt, gewinnt schon etwas Abstand.', style: T.quote(p.muted, size: 17)),
         const SizedBox(height: 20),
         GridView.count(
           crossAxisCount: 2,
@@ -180,7 +180,7 @@ class _SosScreenState extends State<SosScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
       children: [
-        Label('08 · Urge Sprint · Schritt 1'),
+        Label('08 · Notfall-Sprint · Schritt 1'),
         const SizedBox(height: 10),
         Text('Auslöser weg. Jetzt.', style: T.display(p.fg)),
         const SizedBox(height: 10),
@@ -211,7 +211,7 @@ class _SosScreenState extends State<SosScreen> {
         ],
         const SizedBox(height: 18),
         PrimaryButton(
-          _removed.isEmpty ? 'Geht gerade nicht, weiter' : 'Erledigt, weiter',
+          _removed.isEmpty ? 'Geht gerade nicht. Weiter' : 'Erledigt. Weiter',
           icon: Icons.arrow_forward_rounded,
           onPressed: () {
             if (_removed.isNotEmpty) _used.add('Auslöser entfernt');
@@ -234,7 +234,7 @@ class _SosScreenState extends State<SosScreen> {
       children: [
         Text('Die Welle brechen.', style: T.h1(p.fg)),
         const SizedBox(height: 6),
-        Text('Wisch dich durch die Fragen. Oder nimm eins der Werkzeuge unten.', style: T.quote(p.muted, size: 17)),
+        Text('Wisch dich durch die Fragen oder nimm eines der Werkzeuge darunter.', style: T.quote(p.muted, size: 17)),
         const SizedBox(height: 18),
         SwipeDeck(builder: () => buildDeck(s, craving: _craving), height: 270),
         const SectionHeader('Werkzeuge'),
@@ -249,7 +249,7 @@ class _SosScreenState extends State<SosScreen> {
             _ToolTile(
               nr: '01',
               title: 'Surfen',
-              sub: '${s.surfSeconds ~/ 60} Min. Timer',
+              sub: 'Timer, ${s.surfSeconds ~/ 60} Min.',
               done: _used.contains('Urge Surfing'),
               onTap: () => _use('Urge Surfing', () => go(context, const SurfScreen())),
             ),
@@ -262,15 +262,15 @@ class _SosScreenState extends State<SosScreen> {
             ),
             _ToolTile(
               nr: '08',
-              title: 'Kopf füllen',
-              sub: '3 Min. Muster-Spiel',
-              done: _used.contains('Muster-Spiel'),
-              onTap: () => _use('Muster-Spiel', () => go(context, const PatternGameScreen())),
+              title: 'Ablenken',
+              sub: 'Merkspiel, 3 Min.',
+              done: _used.contains('Merkspiel'),
+              onTap: () => _use('Merkspiel', () => go(context, const PatternGameScreen())),
             ),
             _ToolTile(
               nr: '07',
-              title: 'Mein Warum',
-              sub: s.why.trim().isEmpty ? 'Noch nicht geschrieben' : 'Brief lesen',
+              title: 'Dein Warum',
+              sub: s.why.trim().isEmpty ? 'Noch leer' : 'Brief lesen',
               done: _used.contains('Warum gelesen'),
               onTap: () => _use('Warum gelesen', () => go(context, const WhyScreen(readFirst: true))),
             ),
@@ -284,7 +284,7 @@ class _SosScreenState extends State<SosScreen> {
             _ToolTile(
               nr: '09',
               title: s.buddyName.isEmpty ? 'Buddy' : s.buddyName,
-              sub: s.buddyPhone.isEmpty ? 'Hinterlegen' : 'Anrufen',
+              sub: s.buddyPhone.isEmpty ? 'Fehlt noch' : 'Anrufen',
               done: _used.contains('Buddy'),
               onTap: () => _use('Buddy', () async {
                 if (s.buddyPhone.isEmpty) {
@@ -322,7 +322,7 @@ class _SosScreenState extends State<SosScreen> {
           ],
         ),
         const SizedBox(height: 26),
-        PrimaryButton('Die Welle ist durch', icon: Icons.arrow_forward_rounded, onPressed: _next),
+        PrimaryButton('Die Welle ist vorbei', icon: Icons.arrow_forward_rounded, onPressed: _next),
       ],
     );
   }
@@ -335,7 +335,7 @@ class _SosScreenState extends State<SosScreen> {
       children: [
         Text('Wie ist es ausgegangen?', style: T.h1(p.fg)),
         const SizedBox(height: 6),
-        Text('Ehrlich. Hier gibt es keine Strafe, nur Daten.', style: T.quote(p.muted, size: 17)),
+        Text('Sei ehrlich. Hier gibt es keine Strafe, nur Erkenntnisse.', style: T.quote(p.muted, size: 17)),
         const SizedBox(height: 24),
         Text('Wie stark ist das Verlangen jetzt?', style: T.quote(p.fg, size: 18)),
         const SizedBox(height: 12),
@@ -344,8 +344,8 @@ class _SosScreenState extends State<SosScreen> {
           const SizedBox(height: 14),
           Text(
             _after! < _before!
-                ? 'Von $_before auf $_after. Die Welle ist um ${_before! - _after!} gefallen.'
-                : 'Noch genauso stark. Dann ist jetzt Zeit für eine zweite Runde Surfen oder Bewegung.',
+                ? 'Von $_before auf $_after: Die Welle ist um ${_before! - _after!} ${_before! - _after! == 1 ? 'Punkt' : 'Punkte'} gesunken.'
+                : 'Nicht schwächer geworden? Dann geh in eine zweite Runde: surfen oder bewegen.',
             style: T.small(p.fg),
           ),
         ],
@@ -356,7 +356,7 @@ class _SosScreenState extends State<SosScreen> {
         const SizedBox(height: 10),
         TextButton(
           onPressed: () => setState(() => _step = 2),
-          child: Text('Noch nicht vorbei, zurück zu den Werkzeugen', style: T.small(p.muted)),
+          child: Text('Doch noch nicht vorbei? Zurück zu den Werkzeugen', style: T.small(p.muted)),
         ),
       ],
     );
@@ -451,20 +451,20 @@ class _OutcomeSheet extends StatelessWidget {
             Text(
               resisted
                   ? 'Stark. Das war Sieg Nummer ${s.resistedCount}.'
-                  : 'Passiert. Jetzt zählt, was du daraus lernst.',
+                  : 'Kann passieren. Jetzt zählt, was du daraus lernst.',
               style: T.h1(p.fg),
             ),
             const SizedBox(height: 12),
             Text(
               resisted
-                  ? 'Jedes Mal, wenn du eine Welle aussitzt, lernt dein Gehirn: Das Verlangen geht auch ohne Nachgeben. Beim nächsten Mal wird es leichter.'
-                  : 'Ein Ausrutscher ist kein Rückfall, sondern ein Datenpunkt. Die beste Zeit für einen Cue-Audit ist genau jetzt, solange die Erinnerung frisch ist.',
+                  ? 'Jedes Mal, wenn du eine Welle aussitzt, lernt dein Gehirn, dass das Verlangen auch vergeht, ohne dass du nachgibst. Beim nächsten Mal wird es leichter.'
+                  : 'Ein Ausrutscher ist noch kein Rückfall. Er zeigt dir, wo du nachbessern kannst. Der beste Zeitpunkt für einen Auslöser-Check ist jetzt, solange die Erinnerung frisch ist.',
               style: T.quote(p.muted, size: 17),
             ),
             const SizedBox(height: 24),
             if (!resisted) ...[
               PrimaryButton(
-                'Cue-Audit jetzt machen',
+                'Auslöser-Check starten',
                 icon: Icons.search_rounded,
                 onPressed: () => Navigator.of(context).pop('audit'),
               ),

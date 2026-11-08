@@ -33,7 +33,7 @@ class _CouncilScreenState extends State<CouncilScreen> {
       'Was will ich gerade wirklich? Und warum so dringend?',
     ),
     _Member(
-      'Heute-Abend-Ich',
+      'Abend-Ich',
       'in ein paar Stunden',
       Icons.nightlight_outlined,
       'Wie geht es mir heute Abend mit dieser Entscheidung? Stolz oder genervt?',
@@ -45,16 +45,16 @@ class _CouncilScreenState extends State<CouncilScreen> {
       'Wenn ich das jeden Tag so entscheide: Wo stehe ich in einem Jahr?',
     ),
     _Member(
-      '80-jähriges Ich',
+      'Ich mit 80',
       'auf dem Sterbebett',
       Icons.hourglass_bottom_rounded,
-      'Wird mir dieser Moment im Rückblick egal sein, oder war er ein Baustein?',
+      'Ist dieser Moment im Rückblick egal, oder war er ein Baustein für mein Leben?',
     ),
     _Member(
       'Der Hamster',
       'dein kleiner Kumpel',
       Icons.pets_outlined,
-      'Was braucht der Hamster eigentlich? Ruhe, Wärme, Zucker, Bestätigung? Geht das auch anders?',
+      'Was braucht der Hamster eigentlich? Ruhe, Wärme, Zucker, Bestätigung? Bekommt er das auch auf anderem Weg?',
     ),
   ];
 
@@ -104,11 +104,13 @@ class _CouncilScreenState extends State<CouncilScreen> {
         children: [
           const PageHead(title: 'Der Rat tagt.', motto: 'Jeder bekommt eine Stimme. Auch der Hamster.'),
           const SizedBox(height: 20),
+          Text('Worüber stimmt der Rat ab?', style: T.quote(p.fg, size: 18)),
+          const SizedBox(height: 10),
           TextField(
             controller: _q,
             style: T.h2(p.fg),
             textCapitalization: TextCapitalization.sentences,
-            decoration: const InputDecoration(hintText: 'Worüber stimmt der Rat ab? Gehe ich jetzt laufen?'),
+            decoration: const InputDecoration(hintText: 'Zum Beispiel: Gehe ich jetzt laufen?'),
           ),
           const SizedBox(height: 20),
           for (final m in _members) ...[
@@ -186,8 +188,15 @@ class _MemberCard extends StatelessWidget {
             children: [
               Icon(member.icon, size: 20, color: p.fg),
               const SizedBox(width: 10),
-              Text(member.name, style: T.h2(p.fg).copyWith(fontSize: 16)),
-              const Spacer(),
+              Expanded(
+                child: Text(
+                  member.name,
+                  style: T.h2(p.fg).copyWith(fontSize: 16),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
               Label(member.when),
             ],
           ),
@@ -200,7 +209,7 @@ class _MemberCard extends StatelessWidget {
             style: T.body(p.fg),
             textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(
-              hintText: 'Stimme dieses Ichs …',
+              hintText: 'Was sagt dieses Ich? …',
               filled: false,
               border: InputBorder.none,
               enabledBorder: InputBorder.none,

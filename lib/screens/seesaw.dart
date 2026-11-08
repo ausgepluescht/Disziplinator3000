@@ -74,7 +74,7 @@ class _SeesawScreenState extends State<SeesawScreen> {
     if (_filled < 4) return 'Füll mindestens vier Felder aus.';
     if (d == 0) return 'Gleichstand. Lies die Kosten der bequemen Seite noch einmal laut vor.';
     final w = d > 0 ? _a.name.text : _b.name.text;
-    return 'Die Wippe kippt zu „$w“ (${d.abs()} Punkte).';
+    return 'Die Wippe neigt sich zu „$w“ (${d.abs()} ${d.abs() == 1 ? 'Punkt' : 'Punkte'} Vorsprung).';
   }
 
   void _save() {
@@ -96,7 +96,7 @@ class _SeesawScreenState extends State<SeesawScreen> {
       ),
     );
     HapticFeedback.mediumImpact();
-    toast(context, 'Gespeichert im Protokoll.');
+    toast(context, 'Im Protokoll gespeichert.');
     Navigator.of(context).pop(true);
   }
 
@@ -110,13 +110,18 @@ class _SeesawScreenState extends State<SeesawScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
         children: [
-          const PageHead(title: 'Mach es unfair.', motto: 'Du weißt es längst. Jetzt sollst du es auch spüren.'),
+          const PageHead(
+            title: 'Mach die Folgen spürbar.',
+            motto: 'Du weißt es längst. Jetzt sollst du es auch spüren.',
+          ),
           const SizedBox(height: 20),
+          Text('Worum geht es?', style: T.quote(p.fg, size: 18)),
+          const SizedBox(height: 10),
           TextField(
             controller: _question,
             style: T.body(p.fg),
             textCapitalization: TextCapitalization.sentences,
-            decoration: const InputDecoration(hintText: 'Worum geht es? Zum Beispiel: Gym oder Sofa?'),
+            decoration: const InputDecoration(hintText: 'Zum Beispiel: Sport oder Sofa?'),
           ),
           const SizedBox(height: 18),
           Container(
@@ -169,7 +174,7 @@ class _SeesawScreenState extends State<SeesawScreen> {
           PrimaryButton('Entscheidung speichern', icon: Icons.check_rounded, onPressed: _filled == 0 ? null : _save),
           const SizedBox(height: 14),
           Text(
-            'Gewicht 1 bis 3: Wie schwer wiegt das für dich? Nutzen drückt die Seite nach unten, Kosten heben sie an.',
+            'Gewicht 1 bis 3: Wie schwer wiegt der Punkt für dich? Nutzen drückt die Seite nach unten, Kosten heben sie an.',
             style: T.small(p.muted),
           ),
         ],

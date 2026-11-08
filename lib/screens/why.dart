@@ -65,7 +65,7 @@ class _WhyScreenState extends State<WhyScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('07 · MEIN WARUM'),
+        title: const Text('07 · DEIN WARUM'),
         actions: [
           if (!_editing)
             IconButton(
@@ -83,7 +83,7 @@ class _WhyScreenState extends State<WhyScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
       children: [
-        Label('Ein Brief an dich, ${s.displayName}'),
+        Label(s.name.trim().isEmpty ? 'Ein Brief an dich' : 'Ein Brief an dich, ${s.name.trim()}'),
         const SizedBox(height: 22),
         Text(s.why, style: T.quote(p.fg, size: 23).copyWith(height: 1.5)),
         const SizedBox(height: 36),
@@ -107,12 +107,12 @@ class _WhyScreenState extends State<WhyScreen> {
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
       children: [
         const PageHead(
-          title: 'Dein Raketentreibstoff.',
+          title: 'Dein Treibstoff.',
           motto: 'Schreib es so lebendig, dass du ihm nicht ausweichen kannst.',
         ),
         const SizedBox(height: 18),
         Text(
-          'Nicht „Ich will fitter sein“, sondern warum. Wen willst du erleben, was willst du tun können, wovon willst du frei sein? Tipp auf eine Leitfrage, um sie in den Brief zu übernehmen.',
+          'Nicht „Ich will fitter werden“, sondern: Warum eigentlich? Wen willst du aufwachsen sehen, was willst du noch können, wovon willst du frei sein? Tipp auf eine Leitfrage, um sie in deinen Brief zu übernehmen.',
           style: T.body(p.muted),
         ),
         const SizedBox(height: 16),
@@ -139,7 +139,7 @@ class _WhyScreenState extends State<WhyScreen> {
           maxLines: null,
           textCapitalization: TextCapitalization.sentences,
           style: T.quote(p.fg, size: 18).copyWith(height: 1.5),
-          decoration: InputDecoration(hintText: 'Lieber ${s.displayName}, …'),
+          decoration: InputDecoration(hintText: s.name.trim().isEmpty ? 'Hallo, ich …' : 'Hallo ${s.name.trim()}, …'),
         ),
         const SizedBox(height: 16),
         PrimaryButton('Brief speichern', icon: Icons.check_rounded, onPressed: _save),

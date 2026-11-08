@@ -8,7 +8,7 @@ import '../data/cravings.dart';
 import '../theme.dart';
 import '../widgets/ui.dart';
 
-/// Technik 8: Urge Sprint in drei Schritten.
+/// Technik 8: Notfall-Sprint in drei Schritten.
 class SprintScreen extends StatefulWidget {
   final String? craving;
   const SprintScreen({super.key, this.craving});
@@ -27,15 +27,18 @@ class _SprintScreenState extends State<SprintScreen> {
     final p = context.c;
     final c = cravingById(widget.craving);
     final tips = widget.craving == null
-        ? ['Snack wegwerfen, Handy weglegen, Laptop zuklappen. Was auch immer es ist: weg damit.']
+        ? ['Snack wegwerfen, Handy weglegen, Laptop zuklappen. Was auch immer es ist: Weg damit.']
         : c.removeTrigger;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('08 · URGE SPRINT')),
+      appBar: AppBar(title: const Text('08 · NOTFALL-SPRINT')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
         children: [
-          const PageHead(title: 'Sprint. Jetzt.', motto: 'Das Zeitfenster ist kurz. Wer zögert, malt schon aus.'),
+          const PageHead(
+            title: 'Sprint. Jetzt.',
+            motto: 'Das Zeitfenster ist kurz. Wer zögert, malt es sich schon aus.',
+          ),
           const SizedBox(height: 24),
           _Step(
             nr: '1',
@@ -67,7 +70,7 @@ class _SprintScreenState extends State<SprintScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Schon eine einzige Runde Bewegung senkt Verlangen messbar. 15 Minuten Gehen reichen.',
+                  'Schon kurze Bewegung schwächt das Verlangen messbar ab. 15 Minuten Gehen reichen.',
                   style: T.body(p.fg),
                 ),
                 const SizedBox(height: 10),
@@ -85,18 +88,18 @@ class _SprintScreenState extends State<SprintScreen> {
           const SizedBox(height: 12),
           _Step(
             nr: '3',
-            title: 'Kopf füllen',
+            title: 'Kopf beschäftigen',
             done: _three,
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Verlangen lebt im Arbeitsgedächtnis. Füll es mit etwas anderem, dann ist kein Platz mehr. Drei Minuten genügen.',
+                  'Verlangen braucht Platz im Arbeitsgedächtnis. Füll es mit etwas anderem, dann bleibt keiner mehr übrig. Drei Minuten genügen.',
                   style: T.body(p.fg),
                 ),
                 const SizedBox(height: 10),
                 GhostButton(
-                  'Muster-Spiel, 3 Min.',
+                  'Merkspiel, 3 Min.',
                   icon: Icons.grid_view_rounded,
                   onPressed: () async {
                     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PatternGameScreen()));
@@ -168,8 +171,8 @@ const _moves = [
   ('Treppe rauf und runter', 5 * 60),
   ('Kniebeugen, 3 × 15', 4 * 60),
   ('Hampelmänner', 2 * 60),
-  ('Liegestütze bis zur Grenze', 2 * 60),
-  ('Planke halten', 60),
+  ('Liegestütze, so viele du schaffst', 2 * 60),
+  ('Unterarmstütz halten', 60),
 ];
 
 class MoveScreen extends StatefulWidget {
@@ -220,10 +223,7 @@ class _MoveScreenState extends State<MoveScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
         children: [
-          const PageHead(
-            title: 'Beweg dich.',
-            motto: 'Bewegung baut einen Schild gegen Verlangen. Selbst unter Stress.',
-          ),
+          const PageHead(title: 'Beweg dich.', motto: 'Bewegung schützt vor Verlangen, sogar unter Stress.'),
           const SizedBox(height: 20),
           Wrap(
             spacing: 8,
@@ -288,7 +288,7 @@ class _MoveScreenState extends State<MoveScreen> {
   }
 }
 
-// Muster-Spiel ---------------------------------------------------------------
+// Merkspiel -----------------------------------------------------------------
 
 /// Ein Merkspiel, das drei Minuten lang das visuelle Arbeitsgedächtnis füllt.
 class PatternGameScreen extends StatefulWidget {
@@ -402,7 +402,7 @@ class _PatternGameScreenState extends State<PatternGameScreen> {
     final p = context.c;
     final over = _started && _left == 0;
     return Scaffold(
-      appBar: AppBar(title: const Text('08 · KOPF FÜLLEN')),
+      appBar: AppBar(title: const Text('08 · KOPF BESCHÄFTIGEN')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -434,12 +434,12 @@ class _PatternGameScreenState extends State<PatternGameScreen> {
               const SizedBox(height: 12),
               Text(
                 !_started
-                    ? 'Merk dir die Reihenfolge der Felder und tipp sie nach. Jede Runde eins mehr.'
+                    ? 'Merk dir, in welcher Reihenfolge die Felder aufleuchten, und tipp sie nach. Jede Runde kommt eins dazu.'
                     : over
-                    ? 'Drei Minuten voll. Wie fühlt sich das Verlangen jetzt an?'
+                    ? 'Drei Minuten geschafft. Wie stark ist das Verlangen jetzt?'
                     : _showing
-                    ? 'Merken …'
-                    : 'Jetzt du. ${_seq.length - _input} noch.',
+                    ? 'Gut aufpassen …'
+                    : 'Jetzt du. Noch ${_seq.length - _input}.',
                 style: T.quote(p.muted, size: 17),
               ),
               const SizedBox(height: 18),

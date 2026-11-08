@@ -50,7 +50,7 @@ class _ReframeScreenState extends State<ReframeScreen> {
           PageHead(
             title: abstract ? 'Zieh den Glanz ab.' : 'Ekel schlägt Gier.',
             motto: abstract
-                ? 'Was ist es wirklich, ohne das Versprechen?'
+                ? 'Was bleibt, wenn das Versprechen wegfällt?'
                 : 'Stell es dir vor. Lebhaft. Mit allen Sinnen.',
           ),
           const SizedBox(height: 20),
@@ -91,7 +91,7 @@ class _ReframeScreenState extends State<ReframeScreen> {
                       children: [
                         Text('${(_i % lines.length) + 1}/${lines.length}', style: T.num(p.inverseMuted, size: 12)),
                         const Spacer(),
-                        Label('Tippen für nächstes', color: p.inverseMuted),
+                        Label('Tippen für das nächste', color: p.inverseMuted),
                       ],
                     ),
                     const SizedBox(height: 24),
@@ -119,8 +119,8 @@ class _ReframeScreenState extends State<ReframeScreen> {
           const SectionHeader('Deine eigene Version'),
           AskField(
             question: abstract
-                ? 'Beschreib, was dich gerade lockt, so nüchtern wie einen Laborbericht.'
-                : 'Welches Bild verdirbt dir das gerade am zuverlässigsten?',
+                ? 'Beschreib, was dich gerade lockt, so nüchtern wie in einem Laborbericht.'
+                : 'Welches Bild verdirbt dir die Lust am zuverlässigsten?',
             hint: abstract ? 'Es ist eigentlich nur …' : 'Stell dir vor …',
             controller: _own,
             minLines: 3,

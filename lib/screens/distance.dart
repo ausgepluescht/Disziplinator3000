@@ -19,7 +19,7 @@ class _DistanceScreenState extends State<DistanceScreen> {
   final _friend = TextEditingController();
   final _advice = TextEditingController();
 
-  static const _egos = ['Batman', 'Wonder Woman', 'Mein bestes Ich', 'Ein Stoiker', 'Ein Profisportler'];
+  static const _egos = ['Batman', 'Wonder Woman', 'Marc Aurel', 'Rocky Balboa', 'Serena Williams'];
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _DistanceScreenState extends State<DistanceScreen> {
             motto: 'Bei anderen sehen wir klar. Bei uns selbst stehen wir uns im Weg.',
           ),
           const SectionHeader('Dritte Person'),
-          Text('Wie sollen dich die Impulse ansprechen?', style: T.quote(p.fg, size: 18)),
+          Text('Mit welchem Namen sollen dich die Impulse ansprechen?', style: T.quote(p.fg, size: 18)),
           const SizedBox(height: 10),
           TextField(
             controller: _name,
@@ -71,7 +71,7 @@ class _DistanceScreenState extends State<DistanceScreen> {
             onChanged: (_) => _saveIdentity(),
           ),
           const SizedBox(height: 22),
-          Text('Wer ist dein Alter Ego?', style: T.quote(p.fg, size: 18)),
+          Text('Wer ist dein Vorbild, dein Alter Ego?', style: T.quote(p.fg, size: 18)),
           const SizedBox(height: 10),
           Wrap(
             spacing: 8,
@@ -92,7 +92,7 @@ class _DistanceScreenState extends State<DistanceScreen> {
           TextField(
             controller: _ego,
             style: T.body(p.fg),
-            decoration: const InputDecoration(hintText: 'Oder eigenes Vorbild'),
+            decoration: const InputDecoration(hintText: 'Oder ein eigenes Vorbild (Name)'),
             onChanged: (_) => _saveIdentity(),
           ),
           const SizedBox(height: 20),
@@ -110,8 +110,8 @@ class _DistanceScreenState extends State<DistanceScreen> {
                 ],
               ),
             ),
-          const SectionHeader('Solomon-Modus'),
-          Text('Beschreib die Situation, als wäre es die eines guten Freundes.', style: T.quote(p.fg, size: 18)),
+          const SectionHeader('Der Blick von außen'),
+          Text('Beschreib deine Situation so, als ginge es um einen guten Freund.', style: T.quote(p.fg, size: 18)),
           const SizedBox(height: 10),
           TextField(
             controller: _friend,

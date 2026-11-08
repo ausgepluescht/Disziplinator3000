@@ -26,7 +26,7 @@ class LogScreen extends StatelessWidget {
             children: [
               _Num(n: '${s.resistedCount}', l: 'Widerstanden'),
               _Num(n: '${s.gaveInCount}', l: 'Nachgegeben'),
-              _Num(n: logs.isEmpty ? '–' : '${(s.resistedCount * 100 / logs.length).round()}%', l: 'Quote'),
+              _Num(n: logs.isEmpty ? '–' : '${(s.resistedCount * 100 / logs.length).round()}%', l: 'Erfolgsquote'),
             ],
           ),
           if (logs.length >= 3) ...[
@@ -95,7 +95,7 @@ class LogScreen extends StatelessWidget {
       byCraving[l.craving] = (byCraving[l.craving] ?? 0) + 1;
     }
     final top = byCraving.entries.reduce((a, b) => a.value >= b.value ? a : b);
-    out.add('Am häufigsten zieht dich: ${cravingById(top.key).label} (${top.value} von ${logs.length}).');
+    out.add('Am häufigsten lockt dich: ${cravingById(top.key).label} (${top.value} von ${logs.length} Momenten).');
 
     final byBlock = <int, int>{};
     for (final l in logs) {
@@ -105,15 +105,15 @@ class LogScreen extends StatelessWidget {
     final tb = byBlock.entries.reduce((a, b) => a.value >= b.value ? a : b);
     final from = (tb.key * 2).toString().padLeft(2, '0');
     final to = (tb.key * 2 + 2).toString().padLeft(2, '0');
-    out.add('Kritischste Zeit: $from bis $to Uhr. Genau dort lohnt ein Cue-Audit.');
+    out.add('Kritischste Zeit: $from bis $to Uhr. Genau hier lohnt sich ein Auslöser-Check.');
 
     final drops = logs.where((l) => l.after != null).map((l) => l.before - l.after!).toList();
     if (drops.isNotEmpty) {
       final avg = drops.reduce((a, b) => a + b) / drops.length;
       out.add(
         avg > 0
-            ? 'Im Schnitt fällt die Welle um ${avg.toStringAsFixed(1)} Punkte, während du die Werkzeuge nutzt.'
-            : 'Die Welle fällt bei dir bisher kaum. Probier längeres Surfen oder Bewegung.',
+            ? 'Mit den Werkzeugen sinkt die Welle im Schnitt um ${avg.toStringAsFixed(1).replaceAll('.', ',')} Punkte.'
+            : 'Die Welle sinkt bei dir bisher kaum. Probier länger zu surfen oder dich mehr zu bewegen.',
       );
     }
 
@@ -125,7 +125,7 @@ class LogScreen extends StatelessWidget {
     }
     if (helped.isNotEmpty) {
       final h = helped.entries.reduce((a, b) => a.value >= b.value ? a : b);
-      out.add('Was bei dir am öftesten dabei war, wenn du widerstanden hast: ${h.key}.');
+      out.add('Am häufigsten dabei, wenn du widerstanden hast: ${h.key}.');
     }
     return out;
   }
@@ -243,7 +243,7 @@ class SavedScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
         children: [
-          const PageHead(title: 'Was dich trifft.', motto: 'Die Sätze, die bei dir wirken. Lies sie, wenn es zieht.'),
+          const PageHead(title: 'Was bei dir wirkt.', motto: 'Deine gesammelten Sätze. Lies sie, wenn es eng wird.'),
           const SizedBox(height: 20),
           if (s.saved.isEmpty)
             Text(

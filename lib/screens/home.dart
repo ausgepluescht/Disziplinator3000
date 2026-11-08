@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
     if (h < 11) return 'Guten Morgen.';
     if (h < 17) return 'Hallo.';
     if (h < 21) return 'Guten Abend.';
-    return 'Späte Stunde.';
+    return 'Schon spät.';
   }
 
   @override
@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 18),
             Text(_greeting(), style: T.quote(p.muted, size: 20)),
             const SizedBox(height: 4),
-            Text('Was zieht gerade an dir?', style: T.display(p.fg)),
+            Text('Was lockt dich gerade?', style: T.display(p.fg)),
             const SizedBox(height: 20),
 
             // Akut -------------------------------------------------------
@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text('Ich werde gerade schwach.', style: T.h1(p.inverseFg)),
                         const SizedBox(height: 6),
-                        Text('Geführt in vier Schritten. Etwa zwei Minuten.', style: T.small(p.inverseMuted)),
+                        Text('Vier geführte Schritte, etwa zwei Minuten.', style: T.small(p.inverseMuted)),
                       ],
                     ),
                   ),
@@ -110,7 +110,7 @@ class HomeScreen extends StatelessWidget {
             ),
 
             // Impuls -----------------------------------------------------
-            const SectionHeader('Impuls zum Hinterfragen'),
+            const SectionHeader('Impulse zum Hinterfragen'),
             SwipeDeck(builder: () => buildDeck(s), height: 290, onOpenTech: (nr) => openTechnique(context, nr)),
             const SizedBox(height: 8),
             Center(child: Text('Nach links wischen: weiter. Nach rechts: merken.', style: T.small(p.muted))),
@@ -120,7 +120,7 @@ class HomeScreen extends StatelessWidget {
             _TechniqueGrid(),
 
             // Persönlich -------------------------------------------------
-            const SectionHeader('Dein Material'),
+            const SectionHeader('Persönlich'),
             _WhyTile(),
             const SizedBox(height: 10),
             Row(
@@ -129,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                   child: _SmallTile(
                     icon: Icons.call_outlined,
                     title: s.buddyName.isEmpty ? 'Buddy' : s.buddyName,
-                    sub: s.buddyPhone.isEmpty ? 'Noch niemand hinterlegt' : 'Jetzt anrufen',
+                    sub: s.buddyPhone.isEmpty ? 'Noch nicht hinterlegt' : 'Jetzt anrufen',
                     onTap: () => s.buddyPhone.isEmpty
                         ? go(context, const AlternativesScreen())
                         : callBuddy(context, s.buddyPhone),
@@ -251,14 +251,16 @@ class _WhyTile extends StatelessWidget {
             children: [
               Text('07', style: T.num(p.fg, size: 13)),
               const SizedBox(width: 8),
-              Label('Mein Warum'),
+              Label('Dein Warum'),
               const Spacer(),
               Icon(has ? Icons.menu_book_outlined : Icons.edit_outlined, size: 18, color: p.fg),
             ],
           ),
           const SizedBox(height: 12),
           Text(
-            has ? why : 'Noch kein Brief an dich selbst. Schreib auf, wofür du das alles machst. Das ist dein Raketentreibstoff.',
+            has
+                ? why
+                : 'Noch kein Brief an dich selbst. Schreib auf, wofür du das alles machst. Das ist dein Treibstoff.',
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style: T.quote(has ? p.fg : p.muted, size: 18),
@@ -319,7 +321,7 @@ class _Stats extends StatelessWidget {
           Container(width: 1, height: 44, color: p.line, margin: const EdgeInsets.only(right: 14)),
           cell('${s.gaveInCount}', 'Nachgegeben'),
           Container(width: 1, height: 44, color: p.line, margin: const EdgeInsets.only(right: 14)),
-          cell('${s.streak}', 'Tage am Stück'),
+          cell('${s.streak}', 'Tage in Folge'),
         ],
       ),
     );

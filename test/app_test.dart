@@ -50,7 +50,7 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(DisziplinatorApp(store: s));
-    expect(find.text('Was zieht gerade an dir?'), findsOneWidget);
+    expect(find.text('Was lockt dich gerade?'), findsOneWidget);
 
     await tester.tap(find.text('Ich werde gerade schwach.'));
     await tester.pumpAndSettle();
@@ -62,17 +62,17 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Auslöser weg. Jetzt.'), findsOneWidget);
-    await tester.tap(find.textContaining('Zähne putzen'));
+    await tester.tap(find.textContaining('Putz dir die Zähne'));
     await tester.pump();
-    await tester.tap(find.text('Erledigt, weiter'));
+    await tester.tap(find.text('Erledigt. Weiter'));
     await tester.pumpAndSettle();
 
     await tester.scrollUntilVisible(
-      find.text('Die Welle ist durch'),
+      find.text('Die Welle ist vorbei'),
       300,
       scrollable: find.descendant(of: find.byType(SosScreen), matching: find.byType(Scrollable)).first,
     );
-    await tester.tap(find.text('Die Welle ist durch'));
+    await tester.tap(find.text('Die Welle ist vorbei'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('3'));

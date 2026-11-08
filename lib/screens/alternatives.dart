@@ -17,7 +17,7 @@ Future<void> textBuddy(BuildContext context, String phone) async {
   final uri = Uri(
     scheme: 'sms',
     path: phone.replaceAll(RegExp(r'[^\d+]'), ''),
-    queryParameters: {'body': 'Hey, mich zieht es gerade ziemlich. Hast du zwei Minuten für mich?'},
+    queryParameters: {'body': 'Hey, ich kämpfe gerade mit mir. Hast du zwei Minuten für mich?'},
   );
   if (!await launchUrl(uri) && context.mounted) toast(context, 'SMS konnte nicht geöffnet werden.');
 }
@@ -104,14 +104,14 @@ class _AlternativesScreenState extends State<AlternativesScreen> {
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
         children: [
           const PageHead(
-            title: 'Gib dir bessere Optionen.',
+            title: 'Schaff dir bessere Optionen.',
             motto: 'Sofort verfügbar. Kostet nichts. Sonst gewinnt das Handy.',
           ),
 
           // Buddy ---------------------------------------------------------
-          const SectionHeader('Accountability-Buddy'),
+          const SectionHeader('Dein Buddy'),
           Text(
-            'Wen darfst du jederzeit anrufen, wenn es dich zieht? Macht einen Pakt.',
+            'Wen darfst du jederzeit anrufen, wenn es brenzlig wird? Schließt einen Pakt.',
             style: T.quote(p.fg, size: 18),
           ),
           const SizedBox(height: 12),
@@ -244,7 +244,7 @@ class _AlternativesScreenState extends State<AlternativesScreen> {
             ),
           const SizedBox(height: 14),
           Text(
-            'Prüf jede Alternative hart: Ist sie in 10 Sekunden erreichbar? Kostet sie nichts? Die süchtigen Ratten wechselten sofort zurück zur Droge, als die Tür zum Artgenossen nur zwei Minuten Verzögerung hatte.',
+            'Prüf jede Alternative kritisch: Erreichst du sie in 10 Sekunden? Kostet sie nichts? Die abhängigen Ratten griffen sofort wieder zur Droge, sobald sich die Tür zum Artgenossen erst zwei Minuten später öffnete.',
             style: T.small(p.muted),
           ),
         ],
