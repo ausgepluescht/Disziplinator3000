@@ -100,8 +100,7 @@ class _AlternativesScreenState extends State<AlternativesScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('09 · BESSERE OPTIONEN')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
         children: [
           const PageHead(
             title: 'Schaff dir bessere Optionen.',

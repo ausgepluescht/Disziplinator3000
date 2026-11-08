@@ -242,6 +242,93 @@ class ScaleRow extends StatelessWidget {
   }
 }
 
+/// Seite mit scrollbarem Inhalt und fester Aktionsleiste unten.
+/// Die Leiste sitzt immer über der Navigationsleiste des Handys,
+/// sodass nie gescrollt werden muss, um weiterzukommen.
+class ActionPage extends StatelessWidget {
+  final PreferredSizeWidget? appBar;
+  final List<Widget> children;
+
+  /// Knöpfe der Aktionsleiste, untereinander. Ohne Leiste bleibt unten
+  /// trotzdem Platz für die Navigationsleiste.
+  final List<Widget>? actions;
+  final double topPadding;
+  final ScrollController? controller;
+
+  const ActionPage({
+    super.key,
+    this.appBar,
+    required this.children,
+    this.actions,
+    this.topPadding = 4,
+    this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appBar,
+      body: ActionBody(topPadding: topPadding, actions: actions, controller: controller, children: children),
+    );
+  }
+}
+
+/// Inhalt von [ActionPage] ohne Scaffold, für Seiten mit eigenem Aufbau.
+class ActionBody extends StatelessWidget {
+  final List<Widget> children;
+  final List<Widget>? actions;
+  final double topPadding;
+  final ScrollController? controller;
+  const ActionBody({super.key, required this.children, this.actions, this.topPadding = 4, this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    final bottom = MediaQuery.paddingOf(context).bottom;
+    return Column(
+      children: [
+        Expanded(
+          child: ListView(
+            controller: controller,
+            padding: EdgeInsets.fromLTRB(20, topPadding, 20, actions == null ? 24 + bottom : 24),
+            children: children,
+          ),
+        ),
+        if (actions != null) ActionBar(children: actions!),
+      ],
+    );
+  }
+}
+
+/// Feste Leiste am unteren Rand, über der Navigationsleiste des Handys.
+class ActionBar extends StatelessWidget {
+  final List<Widget> children;
+  const ActionBar({super.key, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.c;
+    return Container(
+      decoration: BoxDecoration(
+        color: p.bg,
+        border: Border(top: BorderSide(color: p.line)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < children.length; i++) ...[if (i > 0) const SizedBox(height: 8), children[i]],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Einheitlicher Seitenkopf: Nummer in Mono, Titel in Inter, Motto in Lora.
 class PageHead extends StatelessWidget {
   final String? kicker;

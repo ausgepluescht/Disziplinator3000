@@ -44,8 +44,25 @@ class _ReframeScreenState extends State<ReframeScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text('${t.nrLabel} · ${t.title.toUpperCase()}')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
+        actions: [
+          PrimaryButton(
+            'Eigene Version merken',
+            icon: Icons.bookmark_add_outlined,
+            onPressed: () {
+              final txt = _own.text.trim();
+              if (txt.isEmpty) {
+                toast(context, 'Schreib erst deine eigene Version unten auf.');
+                return;
+              }
+              final s = context.readStore;
+              if (!s.isSaved(txt)) s.toggleSaved(txt);
+              _own.clear();
+              FocusScope.of(context).unfocus();
+              toast(context, 'Gemerkt. Du findest es unter „Gemerkt“.');
+            },
+          ),
+        ],
         children: [
           PageHead(
             title: abstract ? 'Zieh den Glanz ab.' : 'Ekel schlägt Gier.',
@@ -124,20 +141,6 @@ class _ReframeScreenState extends State<ReframeScreen> {
             hint: abstract ? 'Es ist eigentlich nur …' : 'Stell dir vor …',
             controller: _own,
             minLines: 3,
-          ),
-          const SizedBox(height: 12),
-          PrimaryButton(
-            'Als Impuls merken',
-            icon: Icons.bookmark_add_outlined,
-            onPressed: () {
-              final txt = _own.text.trim();
-              if (txt.isEmpty) return;
-              final s = context.readStore;
-              if (!s.isSaved(txt)) s.toggleSaved(txt);
-              _own.clear();
-              FocusScope.of(context).unfocus();
-              toast(context, 'Gemerkt. Du findest es unter „Gemerkt“.');
-            },
           ),
           if (!abstract) ...[const SizedBox(height: 22), Text(t.critique, style: T.small(p.muted))],
         ],

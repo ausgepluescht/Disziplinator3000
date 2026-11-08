@@ -32,8 +32,10 @@ class _SprintScreenState extends State<SprintScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('08 · NOTFALL-SPRINT')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
+        actions: [
+          PrimaryButton('Sprint beendet', icon: Icons.flag_outlined, onPressed: () => Navigator.of(context).pop(true)),
+        ],
         children: [
           const PageHead(
             title: 'Sprint. Jetzt.',
@@ -109,8 +111,6 @@ class _SprintScreenState extends State<SprintScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 24),
-          PrimaryButton('Sprint beendet', icon: Icons.flag_outlined, onPressed: () => Navigator.of(context).pop(true)),
         ],
       ),
     );
@@ -220,8 +220,18 @@ class _MoveScreenState extends State<MoveScreen> {
     final total = _moves[_sel].$2;
     return Scaffold(
       appBar: AppBar(title: const Text('08 · BEWEGEN')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
+        actions: [
+          if (_left == 0)
+            PrimaryButton('Geschafft', icon: Icons.check_rounded, onPressed: () => Navigator.of(context).pop(true))
+          else
+            PrimaryButton(
+              _running ? 'Pause' : 'Start',
+              icon: _running ? Icons.pause_rounded : Icons.play_arrow_rounded,
+              onPressed: _toggle,
+            ),
+          GhostButton('Fertig', onPressed: () => Navigator.of(context).pop(true)),
+        ],
         children: [
           const PageHead(title: 'Beweg dich.', motto: 'Bewegung schützt vor Verlangen, sogar unter Stress.'),
           const SizedBox(height: 20),
@@ -271,17 +281,6 @@ class _MoveScreenState extends State<MoveScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 36),
-          if (_left == 0)
-            PrimaryButton('Geschafft', icon: Icons.check_rounded, onPressed: () => Navigator.of(context).pop(true))
-          else
-            PrimaryButton(
-              _running ? 'Pause' : 'Start',
-              icon: _running ? Icons.pause_rounded : Icons.play_arrow_rounded,
-              onPressed: _toggle,
-            ),
-          const SizedBox(height: 10),
-          GhostButton('Fertig', onPressed: () => Navigator.of(context).pop(true)),
         ],
       ),
     );
@@ -405,7 +404,7 @@ class _PatternGameScreenState extends State<PatternGameScreen> {
       appBar: AppBar(title: const Text('08 · KOPF BESCHÄFTIGEN')),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

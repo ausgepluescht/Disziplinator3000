@@ -99,8 +99,21 @@ class _CouncilScreenState extends State<CouncilScreen> {
     final p = context.c;
     return Scaffold(
       appBar: AppBar(title: const Text('06 · RAT DER ICHS')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
+        actions: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(color: p.inverseBg, borderRadius: BorderRadius.circular(14)),
+            child: Row(
+              children: [
+                Text('$_yes:$_no', style: T.num(p.inverseFg, size: 24)),
+                const SizedBox(width: 14),
+                Expanded(child: Text(_verdict, style: T.quote(p.inverseFg, size: 15))),
+              ],
+            ),
+          ),
+          PrimaryButton('Beschluss speichern', icon: Icons.gavel_rounded, onPressed: _complete ? _save : null),
+        ],
         children: [
           const PageHead(title: 'Der Rat tagt.', motto: 'Jeder bekommt eine Stimme. Auch der Hamster.'),
           const SizedBox(height: 20),
@@ -117,21 +130,6 @@ class _CouncilScreenState extends State<CouncilScreen> {
             _MemberCard(member: m, onChanged: () => setState(() {})),
             const SizedBox(height: 12),
           ],
-          const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(color: p.inverseBg, borderRadius: BorderRadius.circular(18)),
-            child: Row(
-              children: [
-                Text('$_yes:$_no', style: T.num(p.inverseFg, size: 34)),
-                const SizedBox(width: 18),
-                Expanded(child: Text(_verdict, style: T.quote(p.inverseFg, size: 18))),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          PrimaryButton('Beschluss speichern', icon: Icons.gavel_rounded, onPressed: _complete ? _save : null),
-          const SizedBox(height: 14),
           Text(
             'Wenn das Jetzt-Ich und der Hamster allein gegen alle anderen stehen, ist die Sache meistens klar.',
             style: T.small(p.muted),

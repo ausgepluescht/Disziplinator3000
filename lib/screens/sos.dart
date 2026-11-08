@@ -164,6 +164,7 @@ class _SosScreenState extends State<SosScreen> {
   Widget build(BuildContext context) {
     final p = context.c;
     const titles = ['Benennen', 'Einordnen', 'Technik', 'Bilanz'];
+    final footer = _footer(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('AKUT · ${_step + 1}/${titles.length} · ${titles[_step].toUpperCase()}'),
@@ -215,219 +216,227 @@ class _SosScreenState extends State<SosScreen> {
                   child: child,
                 ),
               ),
-              child: KeyedSubtree(key: ValueKey(_step), child: _buildStep(context)),
+              child: KeyedSubtree(
+                key: ValueKey(_step),
+                child: ListView(
+                  padding: EdgeInsets.fromLTRB(
+                    20,
+                    24,
+                    20,
+                    footer == null ? 24 + MediaQuery.paddingOf(context).bottom : 24,
+                  ),
+                  children: _buildStep(context),
+                ),
+              ),
             ),
           ),
+          if (footer != null) ActionBar(children: footer),
         ],
       ),
     );
   }
 
-  Widget _buildStep(BuildContext context) => switch (_step) {
+  List<Widget> _buildStep(BuildContext context) => switch (_step) {
     0 => _stepWhat(context),
     1 => _stepRate(context),
     2 => _stepTechnique(context),
     _ => _stepOutcome(context),
   };
 
-  // Schritt 1: Benennen -----------------------------------------------------
-  Widget _stepWhat(BuildContext context) {
+  /// Feste Knöpfe unten, je Schritt.
+  List<Widget>? _footer(BuildContext context) {
     final p = context.c;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
-      children: [
-        Text('Was lockt dich gerade?', style: T.h1(p.fg)),
-        const SizedBox(height: 6),
-        Text('Antippen, und es geht direkt weiter.', style: T.quote(p.muted, size: 17)),
-        const SizedBox(height: 20),
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 2.3,
-          children: [
-            for (final c in cravings)
-              _ChoiceTile(
-                icon: c.icon,
-                text: c.label,
-                selected: _craving == c.id,
-                onTap: () => _pickCraving(c.id),
-                onLongPress: c.custom ? () => _editCustom(c) : null,
-              ),
-            _ChoiceTile(
-              icon: Icons.add_rounded,
-              text: 'Eigenes hinzufügen',
-              selected: false,
-              outlined: true,
-              onTap: () => _editCustom(null),
-            ),
-          ],
-        ),
-        if (customCravings.isNotEmpty) ...[
-          const SizedBox(height: 8),
-          Text('Eigene Kategorien: lange drücken zum Bearbeiten.', style: T.small(p.muted)),
-        ],
+    return switch (_step) {
+      0 => null,
+      1 => [
+        PrimaryButton('Weiter zu den Techniken', icon: Icons.arrow_forward_rounded, onPressed: () => _goTo(2)),
+        Center(child: Text('Alles hier ist freiwillig.', style: T.small(p.muted))),
       ],
-    );
+      2 => [PrimaryButton('Die Welle ist vorbei', icon: Icons.arrow_forward_rounded, onPressed: () => _goTo(3))],
+      _ => [
+        PrimaryButton('Widerstanden', icon: Icons.check_rounded, onPressed: () => _finish(true)),
+        GhostButton('Nachgegeben', onPressed: () => _finish(false)),
+        Center(
+          child: TextButton(
+            onPressed: () => _goTo(2),
+            child: Text('Doch noch nicht vorbei? Zurück zu den Techniken', style: T.small(p.muted)),
+          ),
+        ),
+      ],
+    };
+  }
+
+  // Schritt 1: Benennen -----------------------------------------------------
+  List<Widget> _stepWhat(BuildContext context) {
+    final p = context.c;
+    return [
+      Text('Was lockt dich gerade?', style: T.h1(p.fg)),
+      const SizedBox(height: 6),
+      Text('Antippen, und es geht direkt weiter.', style: T.quote(p.muted, size: 17)),
+      const SizedBox(height: 20),
+      GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 2.3,
+        children: [
+          for (final c in cravings)
+            _ChoiceTile(
+              icon: c.icon,
+              text: c.label,
+              selected: _craving == c.id,
+              onTap: () => _pickCraving(c.id),
+              onLongPress: c.custom ? () => _editCustom(c) : null,
+            ),
+          _ChoiceTile(
+            icon: Icons.add_rounded,
+            text: 'Eigenes hinzufügen',
+            selected: false,
+            outlined: true,
+            onTap: () => _editCustom(null),
+          ),
+        ],
+      ),
+      if (customCravings.isNotEmpty) ...[
+        const SizedBox(height: 8),
+        Text('Eigene Kategorien: lange drücken zum Bearbeiten.', style: T.small(p.muted)),
+      ],
+    ];
   }
 
   // Schritt 2: Einordnen ----------------------------------------------------
-  Widget _stepRate(BuildContext context) {
+  List<Widget> _stepRate(BuildContext context) {
     final p = context.c;
     final c = cravingById(_craving);
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
-      children: [
-        Row(
-          children: [
-            Icon(c.icon, size: 16, color: p.muted),
-            const SizedBox(width: 8),
-            Label(c.label),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Text('Wie stark ist es gerade?', style: T.h1(p.fg)),
-        const SizedBox(height: 14),
-        ScaleRow(value: _before, onChanged: (v) => setState(() => _before = v)),
-        const SizedBox(height: 28),
-        Text('Was fühlst du?', style: T.quote(p.fg, size: 18)),
-        const SizedBox(height: 10),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final f in feelings)
-              Pill(
-                f.label,
-                selected: _feelings.contains(f.id),
-                onTap: () => setState(() => _feelings.contains(f.id) ? _feelings.remove(f.id) : _feelings.add(f.id)),
-              ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _feelingNote,
-          minLines: 1,
-          maxLines: null,
-          style: T.body(p.fg),
-          textCapitalization: TextCapitalization.sentences,
-          decoration: const InputDecoration(hintText: 'Oder in eigenen Worten …'),
-        ),
-        const SizedBox(height: 24),
-        Text('Was geht dir durch den Kopf?', style: T.quote(p.fg, size: 18)),
-        const SizedBox(height: 6),
-        Text('So aufschreiben, wie es in dir klingt. Landet im Protokoll.', style: T.small(p.muted)),
-        const SizedBox(height: 10),
-        TextField(
-          controller: _thought,
-          minLines: 3,
-          maxLines: null,
-          style: T.body(p.fg),
-          textCapitalization: TextCapitalization.sentences,
-          decoration: const InputDecoration(hintText: '„Nur kurz, ich hab heute genug geschafft …“'),
-        ),
-        const SizedBox(height: 28),
-        PrimaryButton('Weiter zu den Techniken', icon: Icons.arrow_forward_rounded, onPressed: () => _goTo(2)),
-        const SizedBox(height: 10),
-        Center(child: Text('Alles hier ist freiwillig.', style: T.small(p.muted))),
-      ],
-    );
+    return [
+      Row(
+        children: [
+          Icon(c.icon, size: 16, color: p.muted),
+          const SizedBox(width: 8),
+          Label(c.label),
+        ],
+      ),
+      const SizedBox(height: 10),
+      Text('Wie stark ist es gerade?', style: T.h1(p.fg)),
+      const SizedBox(height: 14),
+      ScaleRow(value: _before, onChanged: (v) => setState(() => _before = v)),
+      const SizedBox(height: 28),
+      Text('Was fühlst du?', style: T.quote(p.fg, size: 18)),
+      const SizedBox(height: 10),
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final f in feelings)
+            Pill(
+              f.label,
+              selected: _feelings.contains(f.id),
+              onTap: () => setState(() => _feelings.contains(f.id) ? _feelings.remove(f.id) : _feelings.add(f.id)),
+            ),
+        ],
+      ),
+      const SizedBox(height: 12),
+      TextField(
+        controller: _feelingNote,
+        minLines: 1,
+        maxLines: null,
+        style: T.body(p.fg),
+        textCapitalization: TextCapitalization.sentences,
+        decoration: const InputDecoration(hintText: 'Oder in eigenen Worten …'),
+      ),
+      const SizedBox(height: 24),
+      Text('Was geht dir durch den Kopf?', style: T.quote(p.fg, size: 18)),
+      const SizedBox(height: 6),
+      Text('So aufschreiben, wie es in dir klingt. Landet im Protokoll.', style: T.small(p.muted)),
+      const SizedBox(height: 10),
+      TextField(
+        controller: _thought,
+        minLines: 2,
+        maxLines: null,
+        style: T.body(p.fg),
+        textCapitalization: TextCapitalization.sentences,
+        decoration: const InputDecoration(hintText: '„Nur kurz, ich hab heute genug geschafft …“'),
+      ),
+    ];
   }
 
   // Schritt 3: Technik wählen -----------------------------------------------
-  Widget _stepTechnique(BuildContext context) {
+  List<Widget> _stepTechnique(BuildContext context) {
     final p = context.c;
     final thought = _thought.text.trim();
     final rec = _recommended;
     final order = [...rec, ..._akutTechniques.where((n) => !rec.contains(n))];
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
-      children: [
-        Text('Womit gehst du es an?', style: T.h1(p.fg)),
-        const SizedBox(height: 6),
-        Text(
-          rec.isEmpty ? 'Such dir eine Technik aus und bleib bei ihr, bis die Welle flacher wird.' : 'Oben steht, was zu deinem Gefühl passt. Such dir eine Technik aus und bleib bei ihr, bis die Welle flacher wird.',
-          style: T.quote(p.muted, size: 17),
+    return [
+      Text('Womit gehst du es an?', style: T.h1(p.fg)),
+      const SizedBox(height: 6),
+      Text(
+        rec.isEmpty ? 'Such dir eine Technik aus und bleib bei ihr, bis die Welle flacher wird.' : 'Oben steht, was zu deinem Gefühl passt. Such dir eine Technik aus und bleib bei ihr, bis die Welle flacher wird.',
+        style: T.quote(p.muted, size: 17),
+      ),
+      if (thought.isNotEmpty) ...[
+        const SizedBox(height: 18),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            border: Border(left: BorderSide(color: p.fg, width: 3)),
+            color: p.faint,
+            borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label('Dein Gedanke'),
+              const SizedBox(height: 8),
+              Text('„$thought“', style: T.quote(p.fg, size: 17)),
+              const SizedBox(height: 10),
+              Text('Ist das wahr? Oder sammelt das Verlangen gerade Argumente?', style: T.small(p.muted)),
+            ],
+          ),
         ),
-        if (thought.isNotEmpty) ...[
-          const SizedBox(height: 18),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              border: Border(left: BorderSide(color: p.fg, width: 3)),
-              color: p.faint,
-              borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label('Dein Gedanke'),
-                const SizedBox(height: 8),
-                Text('„$thought“', style: T.quote(p.fg, size: 17)),
-                const SizedBox(height: 10),
-                Text('Ist das wahr? Oder sammelt das Verlangen gerade Argumente?', style: T.small(p.muted)),
-              ],
-            ),
-          ),
-        ],
-        const SizedBox(height: 20),
-        for (final nr in order) ...[
-          _TechniqueCard(
-            t: techniqueByNr(nr),
-            reasons: _reasonFor(nr),
-            done: _used.contains(techniqueByNr(nr).title),
-            onTap: () => _useTechnique(techniqueByNr(nr)),
-          ),
-          const SizedBox(height: 10),
-        ],
-        const SizedBox(height: 16),
-        PrimaryButton('Die Welle ist vorbei', icon: Icons.arrow_forward_rounded, onPressed: () => _goTo(3)),
       ],
-    );
+      const SizedBox(height: 20),
+      for (final nr in order) ...[
+        _TechniqueCard(
+          t: techniqueByNr(nr),
+          reasons: _reasonFor(nr),
+          done: _used.contains(techniqueByNr(nr).title),
+          onTap: () => _useTechnique(techniqueByNr(nr)),
+        ),
+        const SizedBox(height: 10),
+      ],
+    ];
   }
 
   // Schritt 4: Bilanz -------------------------------------------------------
-  Widget _stepOutcome(BuildContext context) {
+  List<Widget> _stepOutcome(BuildContext context) {
     final p = context.c;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
-      children: [
-        Text('Wie ist es ausgegangen?', style: T.h1(p.fg)),
-        const SizedBox(height: 6),
-        Text('Sei ehrlich. Hier gibt es keine Strafe, nur Erkenntnisse.', style: T.quote(p.muted, size: 17)),
-        const SizedBox(height: 24),
-        Text('Wie stark ist das Verlangen jetzt?', style: T.quote(p.fg, size: 18)),
-        const SizedBox(height: 12),
-        ScaleRow(value: _after, onChanged: (v) => setState(() => _after = v)),
-        if (_before != null && _after != null) ...[
-          const SizedBox(height: 14),
-          Text(
-            _after! < _before!
-                ? 'Von $_before auf $_after: Die Welle ist um ${_before! - _after!} ${_before! - _after! == 1 ? 'Punkt' : 'Punkte'} gesunken.'
-                : 'Nicht schwächer geworden? Dann probier noch eine zweite Technik.',
-            style: T.small(p.fg),
-          ),
-        ],
-        if (_used.isNotEmpty) ...[
-          const SizedBox(height: 18),
-          Label('Genutzt'),
-          const SizedBox(height: 6),
-          Text(_used.join(' · '), style: T.body(p.fg)),
-        ],
-        const SizedBox(height: 30),
-        PrimaryButton('Widerstanden', icon: Icons.check_rounded, onPressed: () => _finish(true)),
-        const SizedBox(height: 10),
-        GhostButton('Nachgegeben', onPressed: () => _finish(false)),
-        const SizedBox(height: 10),
-        TextButton(
-          onPressed: () => _goTo(2),
-          child: Text('Doch noch nicht vorbei? Zurück zu den Techniken', style: T.small(p.muted)),
+    return [
+      Text('Wie ist es ausgegangen?', style: T.h1(p.fg)),
+      const SizedBox(height: 6),
+      Text('Sei ehrlich. Hier gibt es keine Strafe, nur Erkenntnisse.', style: T.quote(p.muted, size: 17)),
+      const SizedBox(height: 24),
+      Text('Wie stark ist das Verlangen jetzt?', style: T.quote(p.fg, size: 18)),
+      const SizedBox(height: 12),
+      ScaleRow(value: _after, onChanged: (v) => setState(() => _after = v)),
+      if (_before != null && _after != null) ...[
+        const SizedBox(height: 14),
+        Text(
+          _after! < _before!
+              ? 'Von $_before auf $_after: Die Welle ist um ${_before! - _after!} ${_before! - _after! == 1 ? 'Punkt' : 'Punkte'} gesunken.'
+              : 'Nicht schwächer geworden? Dann probier noch eine zweite Technik.',
+          style: T.small(p.fg),
         ),
       ],
-    );
+      if (_used.isNotEmpty) ...[
+        const SizedBox(height: 18),
+        Label('Genutzt'),
+        const SizedBox(height: 6),
+        Text(_used.join(' · '), style: T.body(p.fg)),
+      ],
+    ];
   }
 }
 

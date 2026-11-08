@@ -80,8 +80,15 @@ class _WhyScreenState extends State<WhyScreen> {
   }
 
   Widget _read(BuildContext context, Palette p, Store s) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
+    return ActionBody(
+      topPadding: 8,
+      actions: [
+        PrimaryButton(
+          'Zurück, ich bin bereit',
+          icon: Icons.arrow_back_rounded,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
       children: [
         Label(s.name.trim().isEmpty ? 'Ein Brief an dich' : 'Ein Brief an dich, ${s.name.trim()}'),
         const SizedBox(height: 22),
@@ -92,19 +99,13 @@ class _WhyScreenState extends State<WhyScreen> {
         Text('„Wer ein Warum zum Leben hat, erträgt fast jedes Wie.“', style: T.quote(p.muted, size: 16)),
         const SizedBox(height: 4),
         Label('Friedrich Nietzsche'),
-        const SizedBox(height: 30),
-        PrimaryButton(
-          'Zurück, ich bin bereit',
-          icon: Icons.arrow_back_rounded,
-          onPressed: () => Navigator.of(context).pop(true),
-        ),
       ],
     );
   }
 
   Widget _edit(BuildContext context, Palette p, Store s) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+    return ActionBody(
+      actions: [PrimaryButton('Brief speichern', icon: Icons.check_rounded, onPressed: _save)],
       children: [
         const PageHead(
           title: 'Dein Treibstoff.',
@@ -141,8 +142,6 @@ class _WhyScreenState extends State<WhyScreen> {
           style: T.quote(p.fg, size: 18).copyWith(height: 1.5),
           decoration: InputDecoration(hintText: s.name.trim().isEmpty ? 'Hallo, ich …' : 'Hallo ${s.name.trim()}, …'),
         ),
-        const SizedBox(height: 16),
-        PrimaryButton('Brief speichern', icon: Icons.check_rounded, onPressed: _save),
       ],
     );
   }

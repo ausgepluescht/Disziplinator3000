@@ -100,8 +100,15 @@ class _CravingEditorScreenState extends State<CravingEditorScreen> {
     final editing = widget.existing != null;
     return Scaffold(
       appBar: AppBar(title: Text(editing ? 'KATEGORIE BEARBEITEN' : 'EIGENE KATEGORIE')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
+        actions: [
+          PrimaryButton(
+            editing ? 'Änderungen speichern' : 'Kategorie anlegen',
+            icon: Icons.check_rounded,
+            onPressed: _save,
+          ),
+          if (editing) GhostButton('Kategorie löschen', icon: Icons.delete_outline_rounded, onPressed: _delete),
+        ],
         children: [
           PageHead(
             title: editing ? widget.existing!.label : 'Was lockt dich noch?',
@@ -150,16 +157,6 @@ class _CravingEditorScreenState extends State<CravingEditorScreen> {
             controller: _alts,
             minLines: 3,
           ),
-          const SizedBox(height: 26),
-          PrimaryButton(
-            editing ? 'Änderungen speichern' : 'Kategorie anlegen',
-            icon: Icons.check_rounded,
-            onPressed: _save,
-          ),
-          if (editing) ...[
-            const SizedBox(height: 10),
-            GhostButton('Kategorie löschen', icon: Icons.delete_outline_rounded, onPressed: _delete),
-          ],
         ],
       ),
     );

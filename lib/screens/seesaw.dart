@@ -107,8 +107,10 @@ class _SeesawScreenState extends State<SeesawScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('05 · ENTSCHEIDUNGS-WIPPE')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
+        actions: [
+          PrimaryButton('Entscheidung speichern', icon: Icons.check_rounded, onPressed: _filled == 0 ? null : _save),
+        ],
         children: [
           const PageHead(
             title: 'Mach die Folgen spürbar.',
@@ -170,9 +172,7 @@ class _SeesawScreenState extends State<SeesawScreen> {
               const SizedBox(height: 10),
             ],
           ],
-          const SizedBox(height: 12),
-          PrimaryButton('Entscheidung speichern', icon: Icons.check_rounded, onPressed: _filled == 0 ? null : _save),
-          const SizedBox(height: 14),
+          const SizedBox(height: 6),
           Text(
             'Gewicht 1 bis 3: Wie schwer wiegt der Punkt für dich? Nutzen drückt die Seite nach unten, Kosten heben sie an.',
             style: T.small(p.muted),

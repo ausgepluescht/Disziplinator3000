@@ -33,8 +33,7 @@ class _LogScreenState extends State<LogScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('PROTOKOLL')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
         children: [
           const PageHead(title: 'Deine Muster.', motto: 'Kein Urteil. Nur Daten, aus denen du lernst.'),
           if (filterable.length > 1) ...[
@@ -365,8 +364,7 @@ class SavedScreen extends StatelessWidget {
     final s = context.store;
     return Scaffold(
       appBar: AppBar(title: const Text('GEMERKT')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
         children: [
           const PageHead(title: 'Was bei dir wirkt.', motto: 'Deine gesammelten Sätze. Lies sie, wenn es eng wird.'),
           const SizedBox(height: 20),

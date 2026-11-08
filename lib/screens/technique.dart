@@ -22,20 +22,20 @@ class TechniqueScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text('TECHNIK ${t.nrLabel} / ${techniques.length}')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
+        actions: t.tool == null
+            ? null
+            : [
+                PrimaryButton(
+                  t.toolLabel ?? 'Werkzeug öffnen',
+                  icon: Icons.arrow_forward_rounded,
+                  onPressed: () => openTool(context, t),
+                ),
+              ],
         children: [
           PageHead(title: t.title, motto: t.motto),
           const SizedBox(height: 18),
           Text(s.fill(t.explain), style: T.body(p.fg)),
-          if (t.tool != null) ...[
-            const SizedBox(height: 22),
-            PrimaryButton(
-              t.toolLabel ?? 'Werkzeug öffnen',
-              icon: Icons.arrow_forward_rounded,
-              onPressed: () => openTool(context, t),
-            ),
-          ],
           const SectionHeader('Impulse'),
           SwipeDeck(
             key: ValueKey('deck$nr'),

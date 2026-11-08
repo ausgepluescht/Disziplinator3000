@@ -53,8 +53,21 @@ class _DistanceScreenState extends State<DistanceScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('04 · BATMAN-TECHNIK')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+      body: ActionBody(
+        actions: [
+          PrimaryButton(
+            'Rat als Impuls merken',
+            icon: Icons.bookmark_add_outlined,
+            onPressed: () {
+              final a = _advice.text.trim();
+              if (a.isEmpty) return;
+              final st = context.readStore;
+              if (!st.isSaved(a)) st.toggleSaved(a);
+              FocusScope.of(context).unfocus();
+              toast(context, 'Gemerkt. Jetzt gilt der Rat auch für dich.');
+            },
+          ),
+        ],
         children: [
           const PageHead(
             title: 'Geh auf Abstand.',
@@ -131,19 +144,6 @@ class _DistanceScreenState extends State<DistanceScreen> {
             style: T.body(p.fg),
             textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(hintText: 'Ich würde ihm sagen …'),
-          ),
-          const SizedBox(height: 14),
-          PrimaryButton(
-            'Rat als Impuls merken',
-            icon: Icons.bookmark_add_outlined,
-            onPressed: () {
-              final a = _advice.text.trim();
-              if (a.isEmpty) return;
-              final st = context.readStore;
-              if (!st.isSaved(a)) st.toggleSaved(a);
-              FocusScope.of(context).unfocus();
-              toast(context, 'Gemerkt. Jetzt gilt der Rat auch für dich.');
-            },
           ),
         ],
       ),

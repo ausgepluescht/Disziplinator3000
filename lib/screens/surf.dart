@@ -106,8 +106,8 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
 
   Widget _setup(BuildContext context) {
     final p = context.c;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
+    return ActionBody(
+      actions: [PrimaryButton('Los geht’s', icon: Icons.waves_rounded, onPressed: _start)],
       children: [
         const PageHead(title: 'Surf die Welle.', motto: 'Nicht wegdrücken, nicht nachgeben. Nur hinspüren.'),
         const SizedBox(height: 24),
@@ -145,8 +145,6 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
           'Danach darfst du tun, was du willst. Hältst du durch, verlängert sich der Timer beim nächsten Mal um eine Minute, bis höchstens 30 Minuten.',
           style: T.small(p.muted),
         ),
-        const SizedBox(height: 28),
-        PrimaryButton('Los geht’s', icon: Icons.waves_rounded, onPressed: _start),
       ],
     );
   }
@@ -179,10 +177,8 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
             child: Text(prompt, key: ValueKey(prompt), textAlign: TextAlign.center, style: T.quote(p.fg, size: 22)),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
-          child: GhostButton('Die Welle ist schon vorbei', onPressed: _stop),
-        ),
+        const SizedBox(height: 12),
+        ActionBar(children: [GhostButton('Die Welle ist schon vorbei', onPressed: _stop)]),
       ],
     );
   }
@@ -191,8 +187,9 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
     final p = context.c;
     final s = context.store;
     final next = (s.surfSeconds + 60).clamp(60, 1800);
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+    return ActionBody(
+      topPadding: 12,
+      actions: [PrimaryButton('Fertig', icon: Icons.check_rounded, onPressed: _close)],
       children: [
         PageHead(
           kicker: _completed ? 'Durchgehalten' : 'Abgebrochen nach ${fmtClock(_target - _left)}',
@@ -214,8 +211,6 @@ class _SurfScreenState extends State<SurfScreen> with SingleTickerProviderStateM
             style: T.small(p.fg),
           ),
         ],
-        const SizedBox(height: 28),
-        PrimaryButton('Fertig', icon: Icons.check_rounded, onPressed: _close),
       ],
     );
   }

@@ -148,7 +148,7 @@ void main() {
     // Schritt 3: Techniken, passende zuerst
     expect(find.text('Womit gehst du es an?'), findsOneWidget);
     expect(find.textContaining('PASST ZU'), findsWidgets);
-    expect(find.text('Notfall-Sprint'), findsOneWidget);
+    expect(find.text('Bessere Optionen'), findsOneWidget);
 
     await tester.scrollUntilVisible(find.text('Die Welle ist vorbei'), 300, scrollable: scrollable);
     await tester.tap(find.text('Die Welle ist vorbei'));

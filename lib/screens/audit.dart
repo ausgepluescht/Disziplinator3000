@@ -102,8 +102,8 @@ class _AuditScreenState extends State<AuditScreen> {
   Widget _overview(BuildContext context) {
     final p = context.c;
     final s = context.store;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 40),
+    return ActionBody(
+      actions: [PrimaryButton('Check starten', icon: Icons.search_rounded, onPressed: () => setState(() => _step = 0))],
       children: [
         const PageHead(
           title: 'Entfern das Schlachtfeld.',
@@ -122,8 +122,6 @@ class _AuditScreenState extends State<AuditScreen> {
               Pill(c.label, icon: c.icon, selected: _craving == c.id, onTap: () => setState(() => _craving = c.id)),
           ],
         ),
-        const SizedBox(height: 22),
-        PrimaryButton('Check starten', icon: Icons.search_rounded, onPressed: () => setState(() => _step = 0)),
         SectionHeader('Deine Umbauten', trailing: Text('${s.audits.length}', style: T.num(p.muted, size: 12))),
         if (s.audits.isEmpty)
           Text(
@@ -157,8 +155,26 @@ class _AuditScreenState extends State<AuditScreen> {
     final p = context.c;
     final q = _questions[_step];
     final last = _step == _questions.length - 1;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
+    return ActionBody(
+      topPadding: 12,
+      actions: [
+        Row(
+          children: [
+            if (_step > 0) ...[
+              Expanded(child: GhostButton('Zurück', onPressed: () => setState(() => _step--))),
+              const SizedBox(width: 10),
+            ],
+            Expanded(
+              flex: 2,
+              child: PrimaryButton(
+                last ? 'Umbau speichern' : 'Weiter',
+                icon: last ? Icons.check_rounded : Icons.arrow_forward_rounded,
+                onPressed: last ? _save : () => setState(() => _step++),
+              ),
+            ),
+          ],
+        ),
+      ],
       children: [
         Row(
           children: List.generate(
@@ -203,23 +219,6 @@ class _AuditScreenState extends State<AuditScreen> {
             ),
           ),
         ],
-        const SizedBox(height: 26),
-        Row(
-          children: [
-            if (_step > 0) ...[
-              Expanded(child: GhostButton('Zurück', onPressed: () => setState(() => _step--))),
-              const SizedBox(width: 10),
-            ],
-            Expanded(
-              flex: 2,
-              child: PrimaryButton(
-                last ? 'Umbau speichern' : 'Weiter',
-                icon: last ? Icons.check_rounded : Icons.arrow_forward_rounded,
-                onPressed: last ? _save : () => setState(() => _step++),
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }
