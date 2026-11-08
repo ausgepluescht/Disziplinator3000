@@ -2,6 +2,7 @@ import 'dart:math';
 
 import '../store.dart';
 import 'cravings.dart';
+import 'feelings.dart';
 import 'techniques.dart';
 
 /// Eine Karte im Impuls-Stapel.
@@ -9,7 +10,7 @@ class Impulse {
   final String text;
   final int tech;
 
-  /// 'frage', 'bild' (Vorstellung) oder 'warum' (eigener Brief).
+  /// 'frage', 'bild' (Vorstellung), 'warum' (eigener Brief) oder 'gefuehl' (zu deinem Gefühl).
   final String kind;
 
   const Impulse(this.text, this.tech, {this.kind = 'frage'});
@@ -17,7 +18,7 @@ class Impulse {
 
 /// Baut einen gemischten Stapel. Mit [craving] werden die passenden
 /// Bilder aus Technik 2 und 3 ergänzt, mit [tech] nur eine Technik.
-List<Impulse> buildDeck(Store s, {String? craving, int? tech, Random? rnd}) {
+List<Impulse> buildDeck(Store s, {String? craving, int? tech, List<String> feelings = const [], Random? rnd}) {
   final r = rnd ?? Random();
   final out = <Impulse>[];
 
@@ -64,6 +65,13 @@ List<Impulse> buildDeck(Store s, {String? craving, int? tech, Random? rnd}) {
   if (tech == null) {
     final i = out.indexWhere((e) => e.kind == 'warum');
     if (i > 2) out.insert(1, out.removeAt(i));
+  }
+
+  // Fragen zu den Gefühlen, die du gerade benannt hast, kommen zuerst.
+  if (tech == null) {
+    final own = [for (final id in feelings) ?feelingById(id)];
+    own.shuffle(r);
+    out.insertAll(0, own.map((f) => Impulse(f.prompt, f.tech, kind: 'gefuehl')));
   }
   return out;
 }

@@ -36,7 +36,11 @@ const _questions = [
 /// Technik 10: Auslöser-Check. Vom Verlangen rückwärts zur Situation.
 class AuditScreen extends StatefulWidget {
   final String? craving;
-  const AuditScreen({super.key, this.craving});
+
+  /// Vorbelegung aus dem Akut-Modus.
+  final String? feeling;
+  final String? thought;
+  const AuditScreen({super.key, this.craving, this.feeling, this.thought});
 
   @override
   State<AuditScreen> createState() => _AuditScreenState();
@@ -44,8 +48,15 @@ class AuditScreen extends StatefulWidget {
 
 class _AuditScreenState extends State<AuditScreen> {
   late String _craving = widget.craving ?? 'handy';
-  final _c = List.generate(_questions.length, (_) => TextEditingController());
-  int _step = -1; // -1 = Übersicht
+  late final _c = [
+    TextEditingController(),
+    TextEditingController(text: widget.feeling ?? ''),
+    TextEditingController(text: widget.thought ?? ''),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+  // -1 = Übersicht. Mit Vorbelegung geht es direkt in den Fragebogen.
+  late int _step = (widget.feeling ?? widget.thought) == null ? -1 : 0;
 
   @override
   void dispose() {

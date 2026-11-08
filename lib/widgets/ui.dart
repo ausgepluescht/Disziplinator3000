@@ -29,7 +29,7 @@ class SectionHeader extends StatelessWidget {
           Label(title, color: context.c.fg),
           const SizedBox(width: 12),
           Expanded(child: Container(height: 1, color: context.c.line)),
-          if (trailing != null) ...[const SizedBox(width: 12), trailing!],
+          if (trailing != null) ...[const SizedBox(width: 12), Flexible(child: trailing!)],
         ],
       ),
     );

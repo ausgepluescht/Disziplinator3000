@@ -1,4 +1,5 @@
 import 'package:disziplinator/data/cravings.dart';
+import 'package:disziplinator/data/feelings.dart';
 import 'package:disziplinator/data/impulses.dart';
 import 'package:disziplinator/data/techniques.dart';
 import 'package:disziplinator/main.dart';
@@ -74,6 +75,32 @@ void main() {
     expect(cravingById('c_1').id, 'sonst');
   });
 
+  test('Gefühle bringen passende Karten nach vorne und bleiben nach dem Laden erhalten', () async {
+    final s = await _store();
+    final deck = buildDeck(s, craving: 'handy', feelings: ['einsam']);
+    expect(deck.first.kind, 'gefuehl');
+    expect(deck.first.text, feelingById('einsam')!.prompt);
+
+    s.addLog(
+      LogEntry(
+        at: DateTime.now(),
+        craving: 'porno',
+        before: 8,
+        outcome: 'gave_in',
+        feelings: ['einsam'],
+        feelingNote: 'irgendwie leer',
+        thought: 'Nur kurz.',
+      ),
+    );
+    await Future<void>.delayed(Duration.zero);
+    final s2 = Store();
+    await s2.load();
+    expect(s2.logs.single.feelings, ['einsam']);
+    expect(s2.logs.single.feelingNote, 'irgendwie leer');
+    expect(s2.logs.single.thought, 'Nur kurz.');
+    expect(feelingLabels(s2.logs.single.feelings), ['Einsam']);
+  });
+
   test('Serie zählt nur Tage ohne Nachgeben', () async {
     final s = await _store();
     final now = DateTime.now();
@@ -105,6 +132,27 @@ void main() {
     await tester.tap(find.text('Weiter'));
     await tester.pumpAndSettle();
 
+    // Schritt 2: Gefühl und Gedanke
+    expect(find.text('Was ist gerade los in dir?'), findsOneWidget);
+    await tester.tap(find.text('Müde'));
+    await tester.tap(find.text('Gestresst'));
+    final thoughtField = find.byWidgetPredicate(
+      (w) => w is TextField && (w.decoration?.hintText ?? '').startsWith('„Nur kurz'),
+    );
+    await tester.scrollUntilVisible(
+      thoughtField,
+      200,
+      scrollable: find.descendant(of: find.byType(SosScreen), matching: find.byType(Scrollable)).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(thoughtField, 'Ich hab es mir verdient.');
+    await tester.pump();
+    expect(find.text('Ich hab es mir verdient.'), findsOneWidget);
+    await tester.ensureVisible(find.text('Weiter'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Weiter'));
+    await tester.pumpAndSettle();
+
     expect(find.text('Auslöser weg. Jetzt.'), findsOneWidget);
     await tester.tap(find.textContaining('Putz dir die Zähne'));
     await tester.pump();
@@ -129,5 +177,7 @@ void main() {
     expect(s.logs.first.before, 7);
     expect(s.logs.first.after, 3);
     expect(s.logs.first.used, contains('Auslöser entfernt'));
+    expect(s.logs.first.feelings, ['muede', 'stress']);
+    expect(s.logs.first.thought, 'Ich hab es mir verdient.');
   });
 }

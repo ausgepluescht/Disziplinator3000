@@ -17,6 +17,15 @@ class LogEntry {
   final List<String> used;
   final String note;
 
+  /// IDs aus `feelings` (data/feelings.dart).
+  final List<String> feelings;
+
+  /// Das Gefühl in eigenen Worten.
+  final String feelingNote;
+
+  /// Was dir in dem Moment durch den Kopf ging.
+  final String thought;
+
   LogEntry({
     required this.at,
     required this.craving,
@@ -25,6 +34,9 @@ class LogEntry {
     required this.outcome,
     this.used = const [],
     this.note = '',
+    this.feelings = const [],
+    this.feelingNote = '',
+    this.thought = '',
   });
 
   bool get resisted => outcome == 'resisted';
@@ -37,6 +49,9 @@ class LogEntry {
     'outcome': outcome,
     'used': used,
     'note': note,
+    'feelings': feelings,
+    'feelingNote': feelingNote,
+    'thought': thought,
   };
 
   factory LogEntry.fromJson(Map<String, dynamic> j) => LogEntry(
@@ -47,6 +62,9 @@ class LogEntry {
     outcome: j['outcome'] as String? ?? 'resisted',
     used: (j['used'] as List?)?.cast<String>() ?? const [],
     note: j['note'] as String? ?? '',
+    feelings: (j['feelings'] as List?)?.cast<String>() ?? const [],
+    feelingNote: j['feelingNote'] as String? ?? '',
+    thought: j['thought'] as String? ?? '',
   );
 }
 

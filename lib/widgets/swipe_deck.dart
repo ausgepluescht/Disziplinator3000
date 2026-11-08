@@ -187,13 +187,14 @@ class _CardFace extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.c;
     final t = techniqueByNr(impulse.tech);
-    final isWhy = impulse.kind == 'warum';
+    final isWhy = impulse.kind == 'warum' || impulse.kind == 'gefuehl';
     final bg = isWhy ? p.inverseBg : p.surface;
     final fg = isWhy ? p.inverseFg : p.fg;
     final muted = isWhy ? p.inverseMuted : p.muted;
     final kindLabel = switch (impulse.kind) {
       'bild' => 'Stell es dir vor',
       'warum' => 'Aus deinem Brief',
+      'gefuehl' => 'Zu deinem Gefühl',
       _ => 'Frag dich',
     };
 
