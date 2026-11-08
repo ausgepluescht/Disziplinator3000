@@ -5,6 +5,9 @@ on:
     branches: [main, 'claude/**']
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,7 +25,20 @@ jobs:
       - run: flutter analyze
       - run: flutter test
       - run: flutter build apk --release
+      - run: cp build/app/outputs/flutter-apk/app-release.apk Disziplinator.apk
       - uses: actions/upload-artifact@v4
         with:
           name: disziplinator-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: Disziplinator.apk
+      # Jede Version als Release, damit die APK am Handy direkt herunterladbar ist:
+      # github.com/<owner>/<repo>/releases/latest
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Disziplinator Build ${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
+          make_latest: true
+          files: Disziplinator.apk
+          body: |
+            Automatisch gebaut aus `${{ github.ref_name }}` (${{ github.sha }}).
+            Auf dem Android-Handy: Disziplinator.apk antippen, herunterladen, öffnen, installieren.

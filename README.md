@@ -47,8 +47,14 @@ Die Schriften liegen in `assets/fonts` (SIL Open Font License), die App funktion
 
 ## Auf das Handy bringen
 
-### Android, ohne eigene Entwicklungsumgebung
-Bei jedem Push baut GitHub Actions eine APK (Workflow „Android-APK bauen“). Im Tab *Actions* den letzten Lauf öffnen, unter *Artifacts* `disziplinator-apk` herunterladen, entpacken und die `app-release.apk` auf dem Handy installieren (Installation aus unbekannten Quellen einmal erlauben).
+### Android, ohne eigene Entwicklungsumgebung (empfohlen)
+Bei jedem Push baut GitHub Actions die App und legt sie als Release ab.
+1. Am Handy im Browser öffnen: `github.com/ausgepluescht/Disziplinator3000/releases/latest`
+2. Unter *Assets* auf `Disziplinator.apk` tippen und herunterladen.
+3. Die Datei öffnen. Android fragt einmal, ob der Browser Apps installieren darf: erlauben.
+4. Installieren. Die App erscheint als „Disziplinator“ mit schwarzem D3K-Symbol.
+
+Updates: neue APK genauso installieren, deine Daten bleiben erhalten. Play Protect warnt eventuell, weil die App nicht aus dem Play Store kommt: „Trotzdem installieren“.
 
 ### Android, lokal
 ```bash
