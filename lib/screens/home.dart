@@ -113,15 +113,15 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
+            // Techniken --------------------------------------------------
+            SectionHeader('10 Techniken', trailing: Text('${techniques.length}', style: T.num(p.muted, size: 12))),
+            _TechniqueGrid(),
+
             // Impuls -----------------------------------------------------
             const SectionHeader('Impulse zum Hinterfragen'),
             SwipeDeck(builder: () => buildDeck(s), height: 290, onOpenTech: (nr) => openTechnique(context, nr)),
             const SizedBox(height: 8),
             Center(child: Text('Nach links wischen: weiter. Nach rechts: merken.', style: T.small(p.muted))),
-
-            // Techniken --------------------------------------------------
-            SectionHeader('10 Techniken', trailing: Text('${techniques.length}', style: T.num(p.muted, size: 12))),
-            _TechniqueGrid(),
 
             // Persönlich -------------------------------------------------
             const SectionHeader('Persönlich'),

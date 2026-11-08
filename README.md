@@ -10,12 +10,11 @@ Die Inhalte basieren auf [diesem YouTube-Video](https://www.youtube.com/watch?v=
 
 ## Was die App kann
 
-**Akut-Modus** (die schwarze Kachel oben): in vier Schritten durch das Verlangen.
-1. *Benennen.* Was lockt dich? Kategorie wählen, Stärke von 0 bis 10.
-2. *Gefühl.* Was steckt dahinter? Gefühle antippen (müde, gelangweilt, gestresst, einsam …) oder in eigenen Worten, dazu der Gedanke, der gerade im Kopf ist. Lässt sich überspringen.
-3. *Auslöser weg.* Konkrete Handgriffe passend zur Kategorie.
-4. *Welle brechen.* Dein Gedanke steht oben mit der Frage, ob er wahr ist. Die ersten Karten im Stapel gehen auf deine Gefühle ein, passende Werkzeuge sind markiert und stehen vorne: Surfen, Bewegen, Ablenken, Warum lesen, Alternative ziehen, Buddy anrufen, Wippe, Rat der Ichs.
-5. *Bilanz.* Stärke danach, widerstanden oder nachgegeben. Hast du nachgegeben, bietet dir die App direkt den Auslöser-Check an.
+**Akut-Modus** (die schwarze Kachel oben): in vier Schritten durch das Verlangen, jeder Schritt passt auf einen Handy-Bildschirm.
+1. *Benennen.* Kategorie antippen, es geht direkt weiter.
+2. *Einordnen.* Stärke von 0 bis 10, Gefühle antippen (müde, gelangweilt, gestresst, einsam …) oder in eigenen Worten, dazu der Gedanke, der gerade im Kopf ist. Alles freiwillig, alles landet im Protokoll.
+3. *Technik.* Liste der Techniken, die im Moment helfen. Was zu deinem Gefühl passt, steht markiert oben. Eine Technik antippen öffnet direkt ihr Werkzeug (Surf-Timer, Notfall-Sprint mit Auslöser weg, nüchterne Beschreibungen, Ekel-Bilder, Blick von außen, Wippe, Rat der Ichs, dein Brief, Alternative oder Buddy). Dein Gedanke steht oben mit der Frage, ob er wahr ist.
+4. *Bilanz.* Stärke danach, widerstanden oder nachgegeben. Hast du nachgegeben, bietet dir die App direkt den Auslöser-Check an, mit Gefühl und Gedanke vorausgefüllt.
 
 **Kategorien**: Handy & Social Media, Essen & Süßes, Spontan kaufen, Serien & YouTube, Zocken, Rauchen & Alkohol, Pornos, Aufschieben, Etwas anderes. Eigene Kategorien legst du über „Eigenes hinzufügen“ im Akut-Modus, den Chip „Eigenes“ auf dem Startbildschirm oder in den Einstellungen an, jeweils mit eigenen Handgriffen, nüchternen Beschreibungen, Ekel-Bildern und Alternativen. Leere Felder füllt die App mit allgemeinen Vorschlägen auf. Langes Drücken auf eine eigene Kategorie im Akut-Modus öffnet sie zum Bearbeiten.
 

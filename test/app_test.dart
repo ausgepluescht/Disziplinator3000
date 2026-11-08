@@ -124,49 +124,37 @@ void main() {
     await tester.tap(find.text('Ich werde gerade schwach.'));
     await tester.pumpAndSettle();
 
+    // Schritt 1: Antippen geht direkt weiter
     await tester.tap(find.text('Essen & Süßes'));
-    await tester.ensureVisible(find.text('Weiter'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('7'));
-    await tester.pump();
-    await tester.tap(find.text('Weiter'));
-    await tester.pumpAndSettle();
+    expect(find.text('Wie stark ist es gerade?'), findsOneWidget);
 
-    // Schritt 2: Gefühl und Gedanke
-    expect(find.text('Was ist gerade los in dir?'), findsOneWidget);
+    // Schritt 2: Stärke, Gefühl, Gedanke
+    await tester.tap(find.text('7'));
     await tester.tap(find.text('Müde'));
     await tester.tap(find.text('Gestresst'));
     final thoughtField = find.byWidgetPredicate(
       (w) => w is TextField && (w.decoration?.hintText ?? '').startsWith('„Nur kurz'),
     );
-    await tester.scrollUntilVisible(
-      thoughtField,
-      200,
-      scrollable: find.descendant(of: find.byType(SosScreen), matching: find.byType(Scrollable)).first,
-    );
+    final scrollable = find.descendant(of: find.byType(SosScreen), matching: find.byType(Scrollable)).first;
+    await tester.scrollUntilVisible(thoughtField, 200, scrollable: scrollable);
     await tester.pumpAndSettle();
     await tester.enterText(thoughtField, 'Ich hab es mir verdient.');
     await tester.pump();
-    expect(find.text('Ich hab es mir verdient.'), findsOneWidget);
-    await tester.ensureVisible(find.text('Weiter'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Weiter'));
+    await tester.scrollUntilVisible(find.text('Weiter zu den Techniken'), 200, scrollable: scrollable);
+    await tester.tap(find.text('Weiter zu den Techniken'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Auslöser weg. Jetzt.'), findsOneWidget);
-    await tester.tap(find.textContaining('Putz dir die Zähne'));
-    await tester.pump();
-    await tester.tap(find.text('Erledigt. Weiter'));
-    await tester.pumpAndSettle();
+    // Schritt 3: Techniken, passende zuerst
+    expect(find.text('Womit gehst du es an?'), findsOneWidget);
+    expect(find.textContaining('PASST ZU'), findsWidgets);
+    expect(find.text('Notfall-Sprint'), findsOneWidget);
 
-    await tester.scrollUntilVisible(
-      find.text('Die Welle ist vorbei'),
-      300,
-      scrollable: find.descendant(of: find.byType(SosScreen), matching: find.byType(Scrollable)).first,
-    );
+    await tester.scrollUntilVisible(find.text('Die Welle ist vorbei'), 300, scrollable: scrollable);
     await tester.tap(find.text('Die Welle ist vorbei'));
     await tester.pumpAndSettle();
 
+    // Schritt 4
     await tester.tap(find.text('3'));
     await tester.pump();
     await tester.tap(find.text('Widerstanden'));
@@ -176,7 +164,7 @@ void main() {
     expect(s.logs.first.resisted, isTrue);
     expect(s.logs.first.before, 7);
     expect(s.logs.first.after, 3);
-    expect(s.logs.first.used, contains('Auslöser entfernt'));
+    expect(s.logs.first.craving, 'essen');
     expect(s.logs.first.feelings, ['muede', 'stress']);
     expect(s.logs.first.thought, 'Ich hab es mir verdient.');
   });
