@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'data/cravings.dart';
+
 /// Ein Moment, in dem es dich gezogen hat.
 class LogEntry {
   final DateTime at;
@@ -142,6 +144,7 @@ class Store extends ChangeNotifier {
 
   Future<void> load() async {
     _prefs = await SharedPreferences.getInstance();
+    customCravings.clear();
     final raw = _prefs!.getString(_key);
     if (raw == null) return;
     try {
@@ -159,6 +162,9 @@ class Store extends ChangeNotifier {
       logs = ((j['logs'] as List?) ?? []).map((e) => LogEntry.fromJson((e as Map).cast())).toList();
       audits = ((j['audits'] as List?) ?? []).map((e) => Audit.fromJson((e as Map).cast())).toList();
       decisions = ((j['decisions'] as List?) ?? []).map((e) => Decision.fromJson((e as Map).cast())).toList();
+      customCravings
+        ..clear()
+        ..addAll(((j['customCravings'] as List?) ?? []).map((e) => Craving.fromJson((e as Map).cast())));
     } catch (_) {
       // Defekte Daten nicht überschreiben, sondern beiseitelegen.
       await _prefs!.setString('${_key}_broken_${DateTime.now().millisecondsSinceEpoch}', raw);
@@ -179,6 +185,7 @@ class Store extends ChangeNotifier {
     'logs': logs.map((e) => e.toJson()).toList(),
     'audits': audits.map((e) => e.toJson()).toList(),
     'decisions': decisions.map((e) => e.toJson()).toList(),
+    'customCravings': customCravings.map((e) => e.toJson()).toList(),
   };
 
   Future<void> _save() async {
@@ -194,6 +201,18 @@ class Store extends ChangeNotifier {
   void addLog(LogEntry e) => update((s) => s.logs.insert(0, e));
   void addAudit(Audit a) => update((s) => s.audits.insert(0, a));
   void addDecision(Decision d) => update((s) => s.decisions.insert(0, d));
+
+  /// Eigene Kategorie anlegen oder ändern.
+  void saveCustomCraving(Craving c) => update((_) {
+    final i = customCravings.indexWhere((e) => e.id == c.id);
+    if (i >= 0) {
+      customCravings[i] = c;
+    } else {
+      customCravings.add(c);
+    }
+  });
+
+  void deleteCustomCraving(String id) => update((_) => customCravings.removeWhere((e) => e.id == id));
 
   bool isSaved(String text) => saved.contains(text);
   void toggleSaved(String text) =>
@@ -242,6 +261,7 @@ class Store extends ChangeNotifier {
     logs = [];
     audits = [];
     decisions = [];
+    customCravings.clear();
     await _save();
   }
 }

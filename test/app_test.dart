@@ -1,3 +1,4 @@
+import 'package:disziplinator/data/cravings.dart';
 import 'package:disziplinator/data/impulses.dart';
 import 'package:disziplinator/data/techniques.dart';
 import 'package:disziplinator/main.dart';
@@ -32,6 +33,47 @@ void main() {
     expect(deck.any((i) => i.kind == 'warum'), isTrue);
   });
 
+  test('Pornos ist eine feste Kategorie mit vollständigen Inhalten', () {
+    final c = cravingById('porno');
+    expect(c.label, 'Pornos');
+    expect(c.removeTrigger, isNotEmpty);
+    expect(c.alternatives, isNotEmpty);
+    expect(cravings.last.id, 'sonst');
+  });
+
+  test('Eigene Kategorie wird gespeichert, geladen und aufgefüllt', () async {
+    final s = await _store();
+    s.saveCustomCraving(
+      const Craving(
+        id: 'c_1',
+        label: 'Nachts Essen bestellen',
+        icon: Icons.label_outline_rounded,
+        removeTrigger: ['Liefer-App löschen'],
+        abstract: [],
+        disgust: [],
+        alternatives: ['Brot schmieren'],
+        custom: true,
+      ),
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    // Neu laden wie nach einem App-Neustart
+    final s2 = Store();
+    customCravings.clear();
+    await s2.load();
+    expect(cravings.map((c) => c.label), contains('Nachts Essen bestellen'));
+    expect(cravings.last.id, 'sonst');
+
+    final c = cravingById('c_1');
+    expect(c.removeTrigger.first, 'Liefer-App löschen');
+    expect(c.alternatives.first, 'Brot schmieren');
+    expect(c.abstract, isNotEmpty, reason: 'leere Felder kommen aus „Etwas anderes“');
+    expect(buildDeck(s2, craving: 'c_1').any((i) => i.text == c.abstract.first), isTrue);
+
+    s2.deleteCustomCraving('c_1');
+    expect(cravingById('c_1').id, 'sonst');
+  });
+
   test('Serie zählt nur Tage ohne Nachgeben', () async {
     final s = await _store();
     final now = DateTime.now();
@@ -56,6 +98,8 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Essen & Süßes'));
+    await tester.ensureVisible(find.text('Weiter'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('7'));
     await tester.pump();
     await tester.tap(find.text('Weiter'));

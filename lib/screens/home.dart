@@ -9,6 +9,7 @@ import '../theme.dart';
 import '../widgets/swipe_deck.dart';
 import '../widgets/ui.dart';
 import 'alternatives.dart';
+import 'craving_editor.dart';
 import 'log.dart';
 import 'sos.dart';
 import 'why.dart';
@@ -96,9 +97,12 @@ class HomeScreen extends StatelessWidget {
               height: 42,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: cravings.length,
+                itemCount: cravings.length + 1,
                 separatorBuilder: (_, _) => const SizedBox(width: 8),
                 itemBuilder: (context, i) {
+                  if (i == cravings.length) {
+                    return Pill('Eigenes', icon: Icons.add_rounded, onTap: () => editCraving(context));
+                  }
                   final c = cravings[i];
                   return Pill(
                     c.label,

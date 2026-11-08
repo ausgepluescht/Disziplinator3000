@@ -16,6 +16,8 @@ Die Inhalte basieren auf [diesem YouTube-Video](https://www.youtube.com/watch?v=
 3. *Welle brechen.* Wisch-Stapel mit Fragen und Bildern plus Werkzeuge: Surfen, Bewegen, Kopf beschäftigen, Warum lesen, Alternative ziehen, Buddy anrufen, Wippe, Rat der Ichs.
 4. *Bilanz.* Stärke danach, widerstanden oder nachgegeben. Hast du nachgegeben, bietet dir die App direkt den Auslöser-Check an.
 
+**Kategorien**: Handy & Social Media, Essen & Süßes, Spontan kaufen, Serien & YouTube, Zocken, Rauchen & Alkohol, Pornos, Aufschieben, Etwas anderes. Eigene Kategorien legst du über „Eigenes hinzufügen“ im Akut-Modus, den Chip „Eigenes“ auf dem Startbildschirm oder in den Einstellungen an, jeweils mit eigenen Handgriffen, nüchternen Beschreibungen, Ekel-Bildern und Alternativen. Leere Felder füllt die App mit allgemeinen Vorschlägen auf. Langes Drücken auf eine eigene Kategorie im Akut-Modus öffnet sie zum Bearbeiten.
+
 **Impuls-Stapel**: Karten mit Fragen zum Hinterfragen. Nach links wischen für die nächste, nach rechts zum Merken. Sätze aus deinem eigenen Warum-Brief tauchen im Stapel mit auf (schwarze Karten).
 
 **Die 10 Techniken**, jede mit Erklärung, Forschung, „Kritisch hinterfragt“ und eigenem Werkzeug:

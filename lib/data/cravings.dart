@@ -19,6 +19,10 @@ class Craving {
   /// Technik 9: Alternativen, die sofort verfügbar sind und nichts kosten.
   final List<String> alternatives;
 
+  /// Selbst angelegt? Dann enthalten die Listen nur die eigenen Einträge;
+  /// fehlende Inhalte ergänzt [cravingById] aus „Etwas anderes“.
+  final bool custom;
+
   const Craving({
     required this.id,
     required this.label,
@@ -27,10 +31,43 @@ class Craving {
     required this.abstract,
     required this.disgust,
     required this.alternatives,
+    this.custom = false,
   });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'label': label,
+    'removeTrigger': removeTrigger,
+    'abstract': abstract,
+    'disgust': disgust,
+    'alternatives': alternatives,
+  };
+
+  factory Craving.fromJson(Map<String, dynamic> j) => Craving(
+    id: j['id'] as String,
+    label: j['label'] as String? ?? 'Eigene Kategorie',
+    icon: Icons.label_outline_rounded,
+    removeTrigger: (j['removeTrigger'] as List?)?.cast<String>() ?? const [],
+    abstract: (j['abstract'] as List?)?.cast<String>() ?? const [],
+    disgust: (j['disgust'] as List?)?.cast<String>() ?? const [],
+    alternatives: (j['alternatives'] as List?)?.cast<String>() ?? const [],
+    custom: true,
+  );
+
+  /// Eigene Einträge zuerst, danach die allgemeinen aus [fallback].
+  Craving mergedWith(Craving fallback) => Craving(
+    id: id,
+    label: label,
+    icon: icon,
+    removeTrigger: [...removeTrigger, ...fallback.removeTrigger],
+    abstract: [...abstract, ...fallback.abstract],
+    disgust: [...disgust, ...fallback.disgust],
+    alternatives: [...alternatives, ...fallback.alternatives],
+    custom: true,
+  );
 }
 
-const cravings = <Craving>[
+const builtinCravings = <Craving>[
   Craving(
     id: 'handy',
     label: 'Handy & Social Media',
@@ -190,6 +227,34 @@ const cravings = <Craving>[
     ],
   ),
   Craving(
+    id: 'porno',
+    label: 'Pornos',
+    icon: Icons.no_adult_content_outlined,
+    removeTrigger: [
+      'Leg Handy oder Laptop sofort weg und verlass den Raum. Licht an, Tür auf.',
+      'Schließ alle Tabs und Apps. Kein „nur noch kurz schauen“.',
+      'Aktiviere einen Inhaltsfilter, zum Beispiel in den Bildschirmzeit- oder Jugendschutz-Einstellungen deines Handys.',
+    ],
+    abstract: [
+      'Pixel auf einer Glasscheibe. Fremde Menschen, die dafür bezahlt werden, eine Rolle zu spielen.',
+      'Eine Industrie, die an deinen Klicks verdient und ihre Seiten darauf trimmt, dass du nicht aufhörst.',
+      'Ein Algorithmus, der dir immer stärkere Reize vorschlägt, weil die alten nicht mehr reichen.',
+      'Drehbuch, Scheinwerfer, Schnitt und Nachbearbeitung. Mit echter Nähe hat das so viel zu tun wie ein Werbespot mit einem Abendessen.',
+    ],
+    disgust: [
+      'Stell dir vor, dein Browserverlauf erscheint morgen früh auf dem großen Bildschirm im Meeting.',
+      'Stell dir vor, jemand, den du respektierst, steht genau jetzt hinter dir und schaut auf deinen Bildschirm.',
+      'Stell dir den Moment 20 Minuten danach vor: leer, müde, und der Abend ist trotzdem weg.',
+    ],
+    alternatives: [
+      'Kalt duschen',
+      '20 Liegestütze oder Kniebeugen, sofort',
+      '10 Minuten an die frische Luft',
+      'Jemanden anrufen oder anschreiben',
+      'Ins Wohnzimmer wechseln, das Handy bleibt im Flur',
+    ],
+  ),
+  Craving(
     id: 'aufschieben',
     label: 'Aufschieben',
     icon: Icons.hourglass_empty_rounded,
@@ -236,4 +301,22 @@ const cravings = <Craving>[
   ),
 ];
 
-Craving cravingById(String? id) => cravings.firstWhere((c) => c.id == id, orElse: () => cravings.last);
+/// Selbst angelegte Kategorien. Der Store hält diese Liste aktuell.
+final List<Craving> customCravings = [];
+
+Craving get _other => builtinCravings.last;
+
+/// Alle Kategorien zur Auswahl: feste, dann eigene, „Etwas anderes“ zuletzt.
+List<Craving> get cravings => [...builtinCravings.where((c) => c.id != 'sonst'), ...customCravings, _other];
+
+/// Eine Kategorie mit vollständigen Inhalten. Eigene Kategorien werden mit
+/// den allgemeinen Formulierungen aus „Etwas anderes“ aufgefüllt.
+Craving cravingById(String? id) {
+  for (final c in builtinCravings) {
+    if (c.id == id) return c;
+  }
+  for (final c in customCravings) {
+    if (c.id == id) return c.mergedWith(_other);
+  }
+  return _other;
+}

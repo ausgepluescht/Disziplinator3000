@@ -13,6 +13,7 @@ import '../widgets/swipe_deck.dart';
 import '../widgets/ui.dart';
 import 'alternatives.dart';
 import 'audit.dart';
+import 'craving_editor.dart';
 import 'sprint.dart';
 import 'surf.dart';
 import 'why.dart';
@@ -43,6 +44,18 @@ class _SosScreenState extends State<SosScreen> {
   void _next() {
     HapticFeedback.lightImpact();
     setState(() => _step++);
+  }
+
+  Future<void> _editCustom(Craving? existing) async {
+    final id = await editCraving(context, existing: existing);
+    if (!mounted) return;
+    setState(() {
+      if (id != null) {
+        _craving = id;
+      } else if (_craving != null && cravings.every((c) => c.id != _craving)) {
+        _craving = null;
+      }
+    });
   }
 
   Future<void> _use(String key, Future<Object?> Function() open) async {
@@ -160,9 +173,21 @@ class _SosScreenState extends State<SosScreen> {
                 text: c.label,
                 selected: _craving == c.id,
                 onTap: () => setState(() => _craving = c.id),
+                onLongPress: c.custom ? () => _editCustom(c) : null,
               ),
+            _ChoiceTile(
+              icon: Icons.add_rounded,
+              text: 'Eigenes hinzufügen',
+              selected: false,
+              outlined: true,
+              onTap: () => _editCustom(null),
+            ),
           ],
         ),
+        if (customCravings.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text('Eigene Kategorien: lange drücken zum Bearbeiten.', style: T.small(p.muted)),
+        ],
         const SizedBox(height: 26),
         Text('Wie stark ist es gerade?', style: T.quote(p.fg, size: 18)),
         const SizedBox(height: 12),
@@ -367,8 +392,17 @@ class _ChoiceTile extends StatelessWidget {
   final IconData icon;
   final String text;
   final bool selected;
+  final bool outlined;
   final VoidCallback onTap;
-  const _ChoiceTile({required this.icon, required this.text, required this.selected, required this.onTap});
+  final VoidCallback? onLongPress;
+  const _ChoiceTile({
+    required this.icon,
+    required this.text,
+    required this.selected,
+    required this.onTap,
+    this.onLongPress,
+    this.outlined = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -379,14 +413,15 @@ class _ChoiceTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       radius: 14,
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Row(
         children: [
-          Icon(icon, color: fg, size: 22),
+          Icon(icon, color: outlined ? p.muted : fg, size: 22),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
-              style: T.small(fg).copyWith(fontWeight: FontWeight.w600),
+              style: T.small(outlined ? p.muted : fg).copyWith(fontWeight: FontWeight.w600),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

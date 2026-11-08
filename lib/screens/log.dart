@@ -4,6 +4,7 @@ import '../data/cravings.dart';
 import '../store.dart';
 import '../theme.dart';
 import '../widgets/ui.dart';
+import 'craving_editor.dart';
 
 /// Protokoll mit Mustern: Wann, was, und was bei dir wirklich hilft.
 class LogScreen extends StatelessWidget {
@@ -324,6 +325,22 @@ Future<void> showSettings(BuildContext context) {
                     ],
                   ),
                   const SizedBox(height: 24),
+                  Text('Eigene Kategorien', style: T.h2(p.fg)),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final c in customCravings)
+                        Pill(
+                          c.label,
+                          icon: Icons.edit_outlined,
+                          onTap: () => editCraving(ctx, existing: c),
+                        ),
+                      Pill('Neue Kategorie', icon: Icons.add_rounded, onTap: () => editCraving(ctx)),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
                   Text('Daten', style: T.h2(p.fg)),
                   const SizedBox(height: 6),
                   Text(
@@ -340,7 +357,7 @@ Future<void> showSettings(BuildContext context) {
                         builder: (d) => AlertDialog(
                           title: Text('Wirklich alles löschen?', style: T.h2(p.fg)),
                           content: Text(
-                            'Protokoll, Brief, Alternativen, Buddy und Gemerktes. Das lässt sich nicht rückgängig machen.',
+                            'Protokoll, Brief, Alternativen, Buddy, eigene Kategorien und Gemerktes. Das lässt sich nicht rückgängig machen.',
                             style: T.body(p.fg),
                           ),
                           actions: [
